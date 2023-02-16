@@ -53,7 +53,7 @@ class Agros:
         self.agri_df = pd.read_csv(file_path, index_col=0)
         return self.agri_df
 
-    def country_list(self):
+    def country_list(self) -> list:
         """
         Creates a list of all unique countries/regions available
         in the dataset.
