@@ -53,6 +53,25 @@ class Agros:
         self.agri_df = pd.read_csv(file_path, index_col=0)
         return self.agri_df
 
+    def country_list(self):
+        """
+        Creates a list of all unique countries/regions available
+        in the dataset.
+
+        Parameters
+        ---------------
+        self.agri_df: pandas dataframe
+            A table with information from
+            agricultural_total_factor_productivity.csv
+
+        Returns
+        ---------------
+        list_of_countries: list
+            A list of all unique countries/regions present
+            in the dataset.
+        """
+        list_of_countries = list(self.agri_df.index.unique())
+        return list_of_countries
 
 FILE_URL = "https://github.com/owid/owid-datasets/blob/"\
             "693acdec5821af0a1b73523905d2a6ccefd6d509/datasets/"\
@@ -60,5 +79,6 @@ FILE_URL = "https://github.com/owid/owid-datasets/blob/"\
             "Agricultural%20total%20factor%20productivity%20(USDA).csv?raw=true"
 
 agros = Agros(FILE_URL)
-df = agros.import_file()
-print(df.head())
+
+print(agros.import_file())
+print(agros.country_list())
