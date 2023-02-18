@@ -125,13 +125,11 @@ class Agros:
         mask = np.zeros_like(corr_df, dtype=bool)
         mask[np.triu_indices_from(mask)] = True
 
-        # Set up the matplotlib figure
+        # Set up the matplotlib figure and Generate colormap
         f, ax = plt.subplots(figsize=(11, 9))
-
-        #Generate colormap
         cmap = sns.color_palette("Blues", as_cmap=True)
 
-        # Draw the heatmap with the mask and correct aspect ratio
+        # Draw the heatmap with the mask
         corr_heatmap = sns.heatmap(
                                     corr_df,
                                     mask=mask,
