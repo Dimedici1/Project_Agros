@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from typing import Union
 
 
 class Agros:
@@ -145,6 +146,50 @@ class Agros:
 
         return corr_heatmap
 
+    def area_chart(self, country: Union[str, None] = None, normalize: bool = False):
+        """
+        Plots an area chart of the distinct "_output_" columns. If a country is specified, the chart will
+        show the output for that country only, otherwise the chart will show the sum of the distinct outputs for all
+        countries. If normalize is True, the output will be normalized in relative terms (output will always
+        be 100% for each year).
+
+        Parameters
+        ----------
+        country : str, optional
+            A string representing the name of the country to be plotted.
+        normalize : bool, optional
+            A boolean value indicating whether or not the output should be normalized.
+
+        Returns
+        -------
+        matplotlib.axes._subplots.AxesSubplot
+            The area chart as a Matplotlib axes object.
+
+        Raises
+        ------
+        ValueError
+            If the specified country does not exist in the dataset.
+        """
+        if country is not None and country != 'World':
+            if country not in self.agri_df.index.unique():
+                raise ValueError(f'{country} does not exist in the dataset')
+
+            data = self.agri_df.loc[country, :].copy()
+            title = f'Agricultural Output of {country}'
+        else:
+            data = self.agri_df.copy()
+            title = 'Global Agricultural Output'
+
+        data = data.pivot_table(index='Year', values=[col for col in data.columns if '_output_' in col])
+        if normalize:
+            data = data.div(data.sum(axis=1), axis=0)
+
+        ax = data.plot.area(title=title, stacked=True)
+        ax.set_xlabel('Year')
+        ax.set_ylabel('Output')
+        
+        return ax
+
 FILE_URL = "https://github.com/owid/owid-datasets/blob/"\
             "693acdec5821af0a1b73523905d2a6ccefd6d509/datasets/"\
             "Agricultural%20total%20factor%20productivity%20(USDA)/"\
@@ -157,3 +202,4 @@ agros = Agros(FILE_URL)
 print(agros.import_file())
 print(agros.country_list())
 print(agros.corr_quantity())
+print(agros.area_chart())
