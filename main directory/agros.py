@@ -3,7 +3,8 @@
 """
 Created on Sat Feb 20 17:36:09 2023
 
-@author: Luca Carocci, Anton Badort, Florian Preiss, Lorenzo Schumann
+Authors: 
+    Luca Carocci, Anton Badort, Florian Preiss, Lorenzo Schumann
 
 Description:
     This script defines the Agros class, which represents agricultural
