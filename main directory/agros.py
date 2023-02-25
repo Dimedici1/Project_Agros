@@ -1,10 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
+Created on Sat Feb 20 17:36:09 2023
+
+@author: Luca Carocci, Anton Badort, Florian Preiss, Lorenzo Schumann
+
 Description:
     This script defines the Agros class, which represents agricultural
     data and provides various methods for data analysis.
 
 Requirements:
-    The script imports the following libraries: os, numpy, pandas,
+    The script imports the following libraries: os, typing.Union, numpy, pandas,
     seaborn, and matplotlib.pyplot.
 """
 
