@@ -3,7 +3,7 @@
 """
 Created on Sat Feb 20 17:36:09 2023
 
-Authors: 
+Authors:
     Luca Carocci, Anton Badort, Florian Preiss, Lorenzo Schumann
 
 Description:
@@ -27,15 +27,13 @@ class Agros:
     """
     A class that represents agricultural data and provides various methods for data analysis.
 
-    Parameters
-    ----------
-    file_url : str
-        A string representing the URL or path to the agricultural data file.
-
     Attributes
     ----------
     file_url : str
         A string representing the URL or path to the agricultural data file.
+
+    agri_df : str
+        A dataframe with data from the agricultural data file.
 
     Methods
     -------
@@ -68,6 +66,7 @@ class Agros:
 
     def __init__(self, file_url: str):
         self.file_url = file_url
+        self.agri_df = None
 
     def import_file(self) -> pd.DataFrame:
         """
@@ -75,11 +74,6 @@ class Agros:
         is in the downloads folder and, if not, downloads
         it from the web. If it is there, the file is loaded from the
         downloads folder and returned as a pandas dataframe.
-
-        Attributes
-        ---------------
-        self.file_url: str
-            File permalink
 
         Returns
         ---------------
@@ -95,8 +89,8 @@ class Agros:
             file_df = pd.read_csv(self.file_url, index_col=0)
             file_df.to_csv(file_path)
 
-        agri_df = pd.read_csv(file_path, index_col=0)
-        return agri_df
+        self.agri_df = pd.read_csv(file_path, index_col=0)
+        return self.agri_df
 
     def country_list(self) -> list:
         """
@@ -109,8 +103,7 @@ class Agros:
             A list of all unique countries/regions present
             in the dataset.
         """
-        dataframe = self.import_file()
-        list_of_countries = list(dataframe.index.unique())
+        list_of_countries = list(self.agri_df.index.unique())
         # Filter all exceptions
         exceptions = ["Central Africa", "Central African Republic", "Central America",
                       "Central Asia", "Central Europe", "Developed Asia", "Developed countries",
@@ -134,15 +127,10 @@ class Agros:
         corr_heatmap: sns.matrix.ClusterGrid
             A seaborn heatmap plot of the correlation matrix for quantity-related columns.
         """
-        dataframe = self.import_file()
         # Create subset of self.agri_df that includes only colums that end with '_quantity'
-        quantity_df = dataframe.loc[
-            :,
-            [
-                item.split("_")[-1] == "quantity"
-                for item in list(dataframe.columns)
-            ],
-        ]
+        quantity_df = self.agri_df.loc[:,\
+                                       [item.split("_")[-1] == "quantity"\
+                                        for item in list(self.agri_df.columns)]]
         corr_df = quantity_df.corr()
 
         # Generate mask for the upper triangle
@@ -182,6 +170,7 @@ class Agros:
         ----------
         country : str, optional
             A string representing the name of the country to be plotted.
+
         normalize : bool, optional
             A boolean value indicating whether or not the output should be normalized.
 
@@ -195,16 +184,15 @@ class Agros:
         ValueError
             If the specified country does not exist in the dataset.
         """
-        dataframe = self.import_file()
         # Check if the specified country exists in the dataset
         if country is not None and country != "World":
-            if country not in dataframe.index.unique():
+            if country not in self.agri_df.index.unique():
                 raise ValueError(f"{country} does not exist in the dataset")
             # If a country is specified, filter the dataframe to include only that country
-            data = dataframe.loc[country, :].copy()
+            data = self.agri_df.loc[country, :].copy()
             title = f"Agricultural Output of {country}"
         else:
-            data = dataframe.copy()
+            data = self.agri_df.copy()
             title = "Global Agricultural Output"
         # Create a subset from original dataset with columns containing '_output_'
         data = data.pivot_table(
@@ -244,7 +232,6 @@ class Agros:
             If the Parameters are not a str or a list of str.
         """
         # Import data and create DataFrame to store the output
-        dataframe = self.import_file()
         data = pd.DataFrame()
         # Checks if input is a string and converts it to a list
         if isinstance(countries, str):
@@ -258,10 +245,10 @@ class Agros:
             if not isinstance(country, str):
                 raise TypeError(f"{country} needs to be a string")
             # Checks if the country is in the list of countries
-            if country not in dataframe.index.unique():
+            if country not in self.agri_df.index.unique():
                 raise ValueError(f"{country} does not exist in the dataset")
             # Creates DataFrame with a Year column and a column for the total output of each country
-            temporary = dataframe.loc[country, :].copy()
+            temporary = self.agri_df.loc[country, :].copy()
             temporary = temporary.pivot_table(
                 index="Year",
                 values=[col for col in temporary.columns if "_output_" in col],
@@ -281,7 +268,7 @@ class Agros:
 
         Parameters
         ----------
-        year : int
+        year: int
             An integer that determines the year that will be selected from the data.
 
         Returns
@@ -297,11 +284,9 @@ class Agros:
         # Raise TypeError if year is not an integer
         if not isinstance(year, int):
             raise TypeError(f"{year} does not exist in the dataset")
-        # Import DataFrame
-        dataframe = self.import_file()
 
         # Only consider data from the year passed
-        dataframe = dataframe[dataframe["Year"] == year]
+        dataframe = self.agri_df[self.agri_df["Year"] == year]
 
         # Adjust the size of Irrigation quantity for plotting
         machinery_quantity_scaled = dataframe["irrigation_quantity"] / 1000
