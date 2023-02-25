@@ -9,11 +9,12 @@ Requirements:
 """
 
 import os
+from typing import Union
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from typing import Union
+
 
 class Agros:
     """
@@ -29,9 +30,6 @@ class Agros:
     file_url : str
         A string representing the URL or path to the agricultural data file.
 
-    agri_df : pandas dataframe
-        A table with information from the agricultural data file.
-
     Methods
     -------
     import_file():
@@ -45,26 +43,40 @@ class Agros:
     corr_quantity():
         Calculates the correlation matrix for quantity-related columns of the
         agricultural dataframe and returns a heatmap plot using seaborn.
+
+    area_chart():
+        Plots an area chart of the distinct "_output_" columns. If a country is specified, the
+        chart will show the output for that country only, otherwise the chart will show the sum
+        of the distinct outputs for all countries. If normalize is True, the output will be
+        normalized in relative terms (output will always be 100% for each year).
+
+    total_output():
+        Plots the total of the distinct "_output_" columns per year for each country that
+        is passed. Uses a line chart to make the total output comparable.
+
+    gapminder():
+        Plots a scatter plot to demonstrate the relationship between fertilizer and
+        irrigation quantity on output for a specific year.
     """
 
-    def __init__(self, file_url: str) -> pd.DataFrame:
+    def __init__(self, file_url: str):
         self.file_url = file_url
 
-    def import_file(self):
+    def import_file(self) -> pd.DataFrame:
         """
         Checks if agricultural_total_factor_productivity.csv
         is in the downloads folder and, if not, downloads
         it from the web. If it is there, the file is loaded from the
         downloads folder and returned as a pandas dataframe.
 
-        Parameters
+        Attributes
         ---------------
         self.file_url: str
             File permalink
 
         Returns
         ---------------
-        self.agri_df: pandas dataframe
+        agri_df: pandas dataframe
             A table with information from
             agricultural_total_factor_productivity.csv
         """
@@ -76,19 +88,13 @@ class Agros:
             file_df = pd.read_csv(self.file_url, index_col=0)
             file_df.to_csv(file_path)
 
-        self.agri_df = pd.read_csv(file_path, index_col=0)
-        return self.agri_df
+        agri_df = pd.read_csv(file_path, index_col=0)
+        return agri_df
 
-    def country_list(self):
+    def country_list(self) -> list:
         """
         Creates a list of all unique countries/regions available
         in the dataset.
-
-        Parameters
-        ---------------
-        self.agri_df: pandas dataframe
-            A table with information from
-            agricultural_total_factor_productivity.csv
 
         Returns
         ---------------
@@ -96,7 +102,19 @@ class Agros:
             A list of all unique countries/regions present
             in the dataset.
         """
-        list_of_countries = list(self.agri_df.index.unique())
+        dataframe = self.import_file()
+        list_of_countries = list(dataframe.index.unique())
+        # Filter all exceptions
+        exceptions = ["Central Africa", "Central African Republic", "Central America",
+                      "Central Asia", "Central Europe", "Developed Asia", "Developed countries",
+                      "East Africa", "Eastern Europe", "Europe", "Former Soviet Union",
+                      "High income", "Horn of Africa", "Latin America and the Caribbean",
+                      "Least developed countries", "Low income", "Lower-middle income",
+                      "North Africa", "Northeast Asia", "Northern Europe", "Oceania",
+                      "Pacific", "Sahel", "South Asia", "Southeast Asia", "Southern Africa",
+                      "Southern Europe", "Sub-Saharan Africa", "Upper-middle income",
+                      "West Africa", "Western Europe,", "World", "West Asia"]
+        list_of_countries = [x for x in list_of_countries if x not in exceptions]
         return list_of_countries
 
     def corr_quantity(self) -> sns.matrix.ClusterGrid:
@@ -104,21 +122,20 @@ class Agros:
         Calculates the correlation matrix for quantity-related columns of the
         agricultural dataframe and returns a heatmap plot using seaborn.
 
-        Parameters
-        ---------------
-        self.agri_df: pandas dataframe
-            A table with information from
-            agricultural_total_factor_productivity.csv
-
         Returns:
         ---------------
         corr_heatmap: sns.matrix.ClusterGrid
             A seaborn heatmap plot of the correlation matrix for quantity-related columns.
         """
+        dataframe = self.import_file()
         # Create subset of self.agri_df that includes only colums that end with '_quantity'
-        quantity_df = self.agri_df\
-                        .loc[:,[item.split('_')[-1] == 'quantity'\
-                                for item in list(agros.import_file().columns)]]
+        quantity_df = dataframe.loc[
+            :,
+            [
+                item.split("_")[-1] == "quantity"
+                for item in list(dataframe.columns)
+            ],
+        ]
         corr_df = quantity_df.corr()
 
         # Generate mask for the upper triangle
@@ -126,31 +143,33 @@ class Agros:
         mask[np.triu_indices_from(mask)] = True
 
         # Set up the matplotlib figure and Generate colormap
-        f, ax = plt.subplots(figsize=(11, 9))
+        _, axes = plt.subplots(figsize=(11, 9))
         cmap = sns.color_palette("Blues", as_cmap=True)
 
         # Draw the heatmap with the mask
         corr_heatmap = sns.heatmap(
-                                    corr_df,
-                                    mask=mask,
-                                    cmap=cmap,
-                                    annot=True,
-                                    vmax=1,
-                                    vmin=0.5,
-                                    linewidths=.5,
-                                )
+            corr_df,
+            mask=mask,
+            cmap=cmap,
+            annot=True,
+            vmax=1,
+            vmin=0.5,
+            linewidths=0.5,
+        )
 
-        ax.set_title('Correlation Matrix of Quantity-Related Columns')
-        plt.xticks(rotation=45, ha='right')
+        axes.set_title("Correlation Matrix of Quantity-Related Columns")
+        plt.xticks(rotation=45, ha="right")
 
         return corr_heatmap
 
-    def area_chart(self, country: Union[str, None] = None, normalize: bool = False) -> plt.Axes:
+    def area_chart(
+        self, country: Union[str, None] = None, normalize: bool = False
+    ) -> plt.Axes:
         """
-        Plots an area chart of the distinct "_output_" columns. If a country is specified, the chart will
-        show the output for that country only, otherwise the chart will show the sum of the distinct outputs for all
-        countries. If normalize is True, the output will be normalized in relative terms (output will always
-        be 100% for each year).
+        Plots an area chart of the distinct "_output_" columns. If a country is specified, the
+        chart will show the output for that country only, otherwise the chart will show the sum
+        of the distinct outputs for all countries. If normalize is True, the output will be
+        normalized in relative terms (output will always be 100% for each year).
 
         Parameters
         ----------
@@ -161,7 +180,7 @@ class Agros:
 
         Returns
         -------
-        matplotlib.axes._subplots.AxesSubplot
+        axes: matplotlib.Axes
             The area chart as a Matplotlib axes object.
 
         Raises
@@ -169,140 +188,125 @@ class Agros:
         ValueError
             If the specified country does not exist in the dataset.
         """
-        if country is not None and country != 'World':
-            if country not in self.agri_df.index.unique():
-                raise ValueError(f'{country} does not exist in the dataset')
-
-            data = self.agri_df.loc[country, :].copy()
-            title = f'Agricultural Output of {country}'
+        dataframe = self.import_file()
+        # Check if the specified country exists in the dataset
+        if country is not None and country != "World":
+            if country not in dataframe.index.unique():
+                raise ValueError(f"{country} does not exist in the dataset")
+            # If a country is specified, filter the dataframe to include only that country
+            data = dataframe.loc[country, :].copy()
+            title = f"Agricultural Output of {country}"
         else:
-            data = self.agri_df.copy()
-            title = 'Global Agricultural Output'
-
-        data = data.pivot_table(index='Year', values=[col for col in data.columns if '_output_' in col])
+            data = dataframe.copy()
+            title = "Global Agricultural Output"
+        # Create a subset from original dataset with columns containing '_output_'
+        data = data.pivot_table(
+            index="Year", values=[col for col in data.columns if "_output_" in col]
+        )
+        # Normalize the data if necessary
         if normalize:
             data = data.div(data.sum(axis=1), axis=0)
+        # Plot the area chart
+        axes = data.plot.area(title=title, stacked=True)
+        axes.set_xlabel("Year")
+        axes.set_ylabel("Output")
 
-        ax = data.plot.area(title=title, stacked=True)
-        ax.set_xlabel('Year')
-        ax.set_ylabel('Output')
-        
-        return ax
+        return axes
 
-    def total_output(self, countries: Union[str, list] = list) -> plt.Axes:
+    def total_output(self, countries: Union[str, list] = None) -> plt.Axes:
         """
-        Plots the total of the distinct "_output_" columns per year for each country that is passed. Uses a line chart
-        to make the total output comparable
+        Plots the total of the distinct "_output_" columns per year for each country that
+        is passed. Uses a line chart to make the total output comparable.
 
         Parameters
         ----------
-        country : str, list
-            A string representing the name of the country to be plotted or alternatively a list containing multiple
-            strings of countries.
+        countries : str, list[str]
+            A string representing the name of the country to be plotted or alternatively a
+            list containing multiple strings of countries.
 
         Returns
         -------
-        matplotlib.Axes
+        axes: matplotlib.Axes
             The line chart as a Matplotlib axes object.
 
         Raises
         ------
         ValueError
             If the specified country does not exist in the dataset.
+        TypeError
+            If the Parameters are not a str or a list of str.
         """
-        # Checks if input is a string
-        global data
-        if type(countries) == str:
+        # Import data and create DataFrame to store the output
+        dataframe = self.import_file()
+        data = pd.DataFrame()
+        # Checks if input is a string and converts it to a list
+        if isinstance(countries, str):
+            countries = [countries]
+        # Checks if input is a list (Or a string that was converted to a list)
+        if not isinstance(countries, list):
+            raise TypeError(f"{countries} needs to be a string or a list of strings")
 
-            # Checks if country passed is in the dataset. Raises a ValueError if it is not.
-            if countries not in self.agri_df.index.unique():
-                raise ValueError(f'{countries} does not exist in the dataset')
-
-            # Creates a DataFrame with a Year column and a Total output column for the country
-            else:
-                data = self.agri_df.loc[countries, :].copy()
-                data = data.pivot_table(index='Year', values=[col for col in data.columns if '_output_' in col])
-                data[countries] = data.sum(axis=1)
-                data.drop([col for col in data.columns if '_output_' in col], axis=1, inplace=True)
-
-        # Checks if the input is a list
-        elif type(countries) == list:
-            data = pd.DataFrame()
-
-            # Creates a DataFrame with a Year column and one column for the total output of each country
-            for country in countries:
-                if country not in self.agri_df.index.unique():
-                    raise ValueError(f'{country} does not exist in the dataset')
-                else:
-                    temporary = self.agri_df.loc[country, :].copy()
-                    temporary = temporary.pivot_table(index='Year', values=[col for col in
-                                                                            temporary.columns if '_output_' in col])
-                    data[country] = temporary.sum(axis=1)
-
+        for country in countries:
+            # Checks if every value in the list is a string
+            if not isinstance(country, str):
+                raise TypeError(f"{country} needs to be a string")
+            # Checks if the country is in the list of countries
+            if country not in dataframe.index.unique():
+                raise ValueError(f"{country} does not exist in the dataset")
+            # Creates DataFrame with a Year column and a column for the total output of each country
+            temporary = dataframe.loc[country, :].copy()
+            temporary = temporary.pivot_table(
+                index="Year",
+                values=[col for col in temporary.columns if "_output_" in col],
+            )
+            data[country] = temporary.sum(axis=1)
         # Plot the resulting DataFrame
-        ax = data.plot.area(title='Total Output per Country', stacked=True)
-        ax.set_xlabel('Year')
-        ax.set_ylabel('Total Output')
+        axes = data.plot.area(title="Total Output per Country", stacked=True)
+        axes.set_xlabel("Year")
+        axes.set_ylabel("Total Output")
 
-        return ax
+        return axes
 
     def gapminder(self, year: int) -> plt.Axes:
         """
-        Plots a scatterplot to demonstrate the relationship between fertilizer and irrigation quantity on output for
-        a specific year.
+        Plots a scatter plot to demonstrate the relationship between fertilizer and
+        irrigation quantity on output for a specific year.
 
         Parameters
         ----------
         year : int
-            An integer that determines the year that will be selected from the data
+            An integer that determines the year that will be selected from the data.
 
         Returns
         -------
-        matplotlib.Axes
-            The scatter chart as a Matplotlib axes object.
+        axes: matplotlib.Axes
+            The scatter plot as a Matplotlib axes object.
 
         Raises
         ------
         TypeError
-            If the parameter passed is not an integer
+            If the parameter passed is not an integer.
         """
         # Raise TypeError if year is not an integer
-        if type(year) != int:
-            raise TypeError(f'{year} does not exist in the dataset')
+        if not isinstance(year, int):
+            raise TypeError(f"{year} does not exist in the dataset")
         # Import DataFrame
         dataframe = self.import_file()
 
         # Only consider data from the year passed
-        dataframe = dataframe[dataframe['Year'] == year]
+        dataframe = dataframe[dataframe["Year"] == year]
 
         # Adjust the size of Irrigation quantity for plotting
-        irrigation_quantity_scaled = dataframe['irrigation_quantity'] / 1000
+        machinery_quantity_scaled = dataframe["irrigation_quantity"] / 1000
 
         # Plot the data and set labels
-        ax = dataframe.plot.scatter(title='Effect of fertilizer and irrigation quantity on output',
-                                    x='fertilizer_quantity', y='output_quantity', s=irrigation_quantity_scaled)
-        ax.set_xlabel = 'Fertilizer quantity'
-        ax.set_ylabel = 'Output quantity'
+        axes = dataframe.plot.scatter(
+            title="Effect of Fertilizer and Irrigation Quantity on Output"
+                  "\n(Larger Dots mean more Irrigation)",
+            x="fertilizer_quantity",
+            y="output_quantity",
+            s=machinery_quantity_scaled,
+            alpha=0.5
+        )
 
-        return ax
-
-
-FILE_URL = "https://github.com/owid/owid-datasets/blob/"\
-            "693acdec5821af0a1b73523905d2a6ccefd6d509/datasets/"\
-            "Agricultural%20total%20factor%20productivity%20(USDA)/"\
-            "Agricultural%20total%20factor%20productivity%20(USDA).csv?raw=true"
-
-
-# Create an instance 'agros' of the Agros class
-agros = Agros(FILE_URL)
-
-# Apply methods to the 'agros' instance and print the results
-print(agros.import_file())
-print(agros.country_list())
-print(agros.corr_quantity())
-print(agros.area_chart())
-# Yemen as an example for a string input
-print(agros.total_output('Yemen'))
-# Uruguay and Uzbekistan as an example for a list input
-print(agros.total_output(['Uruguay', 'Uzbekistan']))
-print(agros.gapminder(2010))
+        return axes
