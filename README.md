@@ -97,4 +97,4 @@ We would like to thank the USDA for providing the data used in this project.
 Agros is released under the GNU General Public License v3.0. See LICENSE for more information.
 
 ## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Agros is currently in active development, and new features and improvements are being added on an ongoing basis. While the current version of the project is functional and can provide valuable insights into agricultural total factor productivity, there are still some areas that require further development and optimization. We are committed to continuously improving and updating the project to ensure that it remains a useful tool for researchers and policymakers in the field of agriculture.
