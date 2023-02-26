@@ -7,17 +7,17 @@ Agros is a Python-based project that focuses on analyzing Agricultural Total Fac
 ## Installation
 To use Agros, you need to have Python 3.x installed on your system. You can then install the package using pip:
 
-'''python
+```
 pip install agros
-'''
+```
 
 Alternatively, you can clone this repository and install the package from source:
 
-'''python
+```
 git clone https://gitlab.com/florianpreiss/group_02.git
 cd agros
 pip install .
-'''
+```
 
 ## Requirements
 The following libraries are required to run the Agros class:
@@ -57,28 +57,28 @@ Plots a scatter plot to demonstrate the relationship between fertilizer and irri
 Agros provides a Agros class with several methods for analyzing and visualizing data on agricultural total factor productivity. Here's an example of how to use it:
 
 ### Import class
-'''python
+```
 from agros import Agros
-'''
+```
 
 ### Create an instance 'agros' of the Agros class
-'''python
+```
 agros = Agros(FILE_URL)
-'''
+```
 
 ### Load the data
-'''python
+```
 agros.import_file()
-'''
+```
 
 ### Analyze the data
-'''python
+```
 agros.corr_quantity()
 agros.corr_quantity()
 agros.area_chart()
 agros.total_output()
 agros.gapminder()
-'''
+```
 
 For more examples, please refer to the showcase notebook (showcase.ipynb) in this repository.
 
