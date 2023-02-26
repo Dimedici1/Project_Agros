@@ -306,6 +306,7 @@ class Agros:
         min_size = round(irrigation_quantity_scaled.mean(), 1)
         max_size = round(irrigation_quantity_scaled.max(), 1)
         med_size = round((min_size + max_size)/2, 1)
+
         # create a custom legend
         legend_elements = [
             plt.scatter([], [], s=max_size, alpha=0.5, facecolor='blue',
