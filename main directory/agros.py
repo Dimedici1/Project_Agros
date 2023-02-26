@@ -292,17 +292,31 @@ class Agros:
         dataframe = dataframe[dataframe.index.isin(self.country_list())]
 
         # Adjust the size of Irrigation quantity for plotting
-        machinery_quantity_scaled = dataframe["irrigation_quantity"] / 1000
+        irrigation_quantity_scaled = dataframe["irrigation_quantity"] / 1000
 
-        # Plot the data and set labels
+        # Create the scatter plot
         axes = dataframe.plot.scatter(
-            title="Effect of Fertilizer and Irrigation Quantity on Output"
-                  "\n(Larger Dots mean more Irrigation)",
+            title="Effect of Fertilizer and Irrigation Quantity on Output",
             x="fertilizer_quantity",
             y="output_quantity",
-            s=machinery_quantity_scaled,
+            s=irrigation_quantity_scaled,
             alpha=0.5
         )
+        # Define the three size categories
+        min_size = round(irrigation_quantity_scaled.mean(), 1)
+        max_size = round(irrigation_quantity_scaled.max(), 1)
+        med_size = round((min_size + max_size)/2, 1)
+        # create a custom legend
+        legend_elements = [
+            plt.scatter([], [], s=max_size, alpha=0.5, facecolor='blue',
+                        label=f'Large ({max_size})'),
+            plt.scatter([], [], s=med_size, alpha=0.5, facecolor='blue',
+                        label=f'Medium ({med_size})'),
+            plt.scatter([], [], s=min_size, alpha=0.5, facecolor='blue',
+                        label=f'Small ({min_size})')
+        ]
+
+        plt.legend(handles=legend_elements, loc='upper left',
+                   title='Each dot shows the irrigation\nquantity in one country\n')
 
         return axes
-
