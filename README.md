@@ -56,22 +56,22 @@ Plots a scatter plot to demonstrate the relationship between fertilizer and irri
 ## Usage
 Agros provides a Agros class with several methods for analyzing and visualizing data on agricultural total factor productivity. Here's an example of how to use it:
 
-### Import class
+#### Import class
 ```
 from agros import Agros
 ```
 
-### Create an instance 'agros' of the Agros class
+#### Create an instance 'agros' of the Agros class
 ```
 agros = Agros(FILE_URL)
 ```
 
-### Load the data
+#### Load the data
 ```
 agros.import_file()
 ```
 
-### Analyze the data
+#### Analyze the data
 ```
 agros.corr_quantity()
 agros.corr_quantity()
