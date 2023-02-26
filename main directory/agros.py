@@ -261,7 +261,7 @@ class Agros:
 
         return axes
 
-    def gapminder(self, year: int) -> plt.Axes:
+    def gapminder(self, year: int, logscale: bool = False) -> plt.Axes:
         """
         Plots a scatter plot to demonstrate the relationship between fertilizer and
         irrigation quantity on output for a specific year.
@@ -270,6 +270,8 @@ class Agros:
         ----------
         year: int
             An integer that determines the year that will be selected from the data.
+        logscale: bool
+            A boolean that determines if the axes should be a logscale or linear scale
 
         Returns
         -------
@@ -302,10 +304,16 @@ class Agros:
             s=irrigation_quantity_scaled,
             alpha=0.5
         )
+
+        # Change the axes to a logarithmic scale if log scale is True
+        if logscale:
+            axes.set_xscale('log')
+            axes.set_yscale('log')
+
         # Define the three size categories
         min_size = round(irrigation_quantity_scaled.mean(), 1)
         max_size = round(irrigation_quantity_scaled.max(), 1)
-        med_size = round((min_size + max_size)/2, 1)
+        med_size = round((min_size + max_size) / 2, 1)
 
         # create a custom legend
         legend_elements = [
