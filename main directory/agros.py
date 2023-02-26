@@ -113,7 +113,7 @@ class Agros:
                       "North Africa", "Northeast Asia", "Northern Europe", "Oceania",
                       "Pacific", "Sahel", "South Asia", "Southeast Asia", "Southern Africa",
                       "Southern Europe", "Sub-Saharan Africa", "Upper-middle income",
-                      "West Africa", "Western Europe,", "World", "West Asia"]
+                      "West Africa", "Western Europe", "World", "West Asia"]
         list_of_countries = [x for x in list_of_countries if x not in exceptions]
         return list_of_countries
 
@@ -245,7 +245,7 @@ class Agros:
             if not isinstance(country, str):
                 raise TypeError(f"{country} needs to be a string")
             # Checks if the country is in the list of countries
-            if country not in self.agri_df.index.unique():
+            if country not in self.country_list():
                 raise ValueError(f"{country} does not exist in the dataset")
             # Creates DataFrame with a Year column and a column for the total output of each country
             temporary = self.agri_df.loc[country, :].copy()
@@ -288,6 +288,9 @@ class Agros:
         # Only consider data from the year passed
         dataframe = self.agri_df[self.agri_df["Year"] == year]
 
+        # And only consider countries that are not are not part of exceptions
+        dataframe = dataframe[dataframe.index.isin(self.country_list())]
+
         # Adjust the size of Irrigation quantity for plotting
         machinery_quantity_scaled = dataframe["irrigation_quantity"] / 1000
 
@@ -302,3 +305,4 @@ class Agros:
         )
 
         return axes
+
