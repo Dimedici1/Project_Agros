@@ -2,24 +2,22 @@
 Agros is a Python package for analyzing and visualizing data on agricultural total factor productivity. It was developed by Group 2 as part of a project on agricultural economics.
 
 ## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Agros is a Python-based project that focuses on analyzing Agricultural Total Factor Productivity (TFP). The aim of the project is to provide a tool that can measure the efficiency of agricultural production by evaluating the ratio of total output to total input in a given production process. The resulting analysis can help policymakers and farmers understand the factors that affect agricultural productivity and identify areas for improvement.
 
 ## Installation
 To use Agros, you need to have Python 3.x installed on your system. You can then install the package using pip:
 
+'''python
 pip install agros
+'''
 
 Alternatively, you can clone this repository and install the package from source:
 
+'''python
 git clone https://gitlab.com/florianpreiss/group_02.git
 cd agros
 pip install .
+'''
 
 ## Requirements
 The following libraries are required to run the Agros class:
@@ -34,45 +32,53 @@ The following libraries are required to run the Agros class:
 ## Methods
 The Agros class provides the following methods:
 
-### __init__(self, file_url: str) -> None
+#### __init__(self, file_url: str) -> None
 Initializes the Agros class with a file URL to download agricultural data.
 
-### import_file(self) -> pd.DataFrame
+#### import_file(self) -> pd.DataFrame
 Downloads the agricultural data file if it is not in the downloads folder and returns it as a Pandas DataFrame. If the file is already present in the downloads folder, it will be loaded from there.
 
-### country_list(self) -> list
+#### country_list(self) -> list
 Returns a list of all unique countries/regions available in the dataset.
 
-### corr_quantity(self) -> sns.matrix.ClusterGrid
+#### corr_quantity(self) -> sns.matrix.ClusterGrid
 Calculates the correlation matrix for quantity-related columns of the agricultural DataFrame and returns a heatmap plot using Seaborn.
 
-### area_chart(self, country: Union[str, None] = None, normalize: bool = False) -> plt.Axes
+#### area_chart(self, country: Union[str, None] = None, normalize: bool = False) -> plt.Axes
 Plots an area chart of the distinct "output" columns. If a country is specified, the chart will show the output for that country only. Otherwise, the chart will show the sum of the distinct outputs for all countries. If normalize is True, the output will be normalized in relative terms (output will always be 100% for each year).
 
-### total_output(self, countries: list) -> plt.Axes
+#### total_output(self, countries: list) -> plt.Axes
 Plots the total of the distinct "output" columns per year for each country that is passed. Uses a line chart to make the total output comparable.
 
-### gapminder(self, year: int) -> plt.Axes
+#### gapminder(self, year: int) -> plt.Axes
 Plots a scatter plot to demonstrate the relationship between fertilizer and irrigation quantity on output for a specific year.
 
 ## Usage
 Agros provides a Agros class with several methods for analyzing and visualizing data on agricultural total factor productivity. Here's an example of how to use it:
 
 ### Import class
+'''python
 from agros import Agros
+'''
 
 ### Create an instance 'agros' of the Agros class
+'''python
 agros = Agros(FILE_URL)
+'''
 
 ### Load the data
+'''python
 agros.import_file()
+'''
 
 ### Analyze the data
+'''python
 agros.corr_quantity()
 agros.corr_quantity()
 agros.area_chart()
 agros.total_output()
 agros.gapminder()
+'''
 
 For more examples, please refer to the showcase notebook (showcase.ipynb) in this repository.
 
