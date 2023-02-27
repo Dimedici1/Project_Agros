@@ -158,20 +158,23 @@ class Agros:
 
         return corr_heatmap
 
-    def area_chart(
-        self, countries: Union[str, list] = None , normalize: bool = False
-    ) -> plt.Axes:
+    def area_chart(self, country: Union[str, None, list[str]] = None, normalize: bool = False
+                  ) -> plt.Axes:
         """
-        Plots an area chart of the distinct "_output_" columns. If a country is specified, the
-        chart will show the output for that country only, otherwise the chart will show the sum
-        of the distinct outputs for all countries. If normalize is True, the output will be
-        normalized in relative terms (output will always be 100% for each year).
+        Plots an area chart of the distinct "_output_" columns. If a single country or a list of
+        countries is specified, the method will plot area charts for each country.
+        If no country, an empty list or "World" is specified, the method will plot the sum of the
+        distinct outputs for all countries.
+        If normalize is True, the output will be normalized in relative terms
+        (output will always be 100% for each year).
 
         Parameters
         ----------
-        country : str, list, optional
-            A string representing the name of the country to be plotted or a list of strings
-            where each string represents one country.
+        country : str, list of str or None, optional
+            A string representing the name of the country to be plotted, or a list of strings
+            representing the names of the countries to be plotted.
+            If None, an empty list or "World", the chart will show the sum of the distinct outputs
+            for all countries.
 
         normalize : bool, optional
             A boolean value indicating whether or not the output should be normalized.
@@ -184,30 +187,41 @@ class Agros:
         Raises
         ------
         ValueError
-            If the specified country does not exist in the dataset.
+            If any of the specified countries does not exist in the dataset.
+
+        ValueError
+            If any of the specified countries is not a country.
         """
-        #Make countries a list of strings
-        if isinstance(countries, str):
-            countries = [countries]
-        # Checks if input is a list (Or a string that was converted to a list)
-        if not isinstance(countries, list):
-            raise TypeError(f"{countries} needs to be a string or a list of strings")
-        
-        for country in countries:
-            # Check if the specified country exists in the dataset
-            if country is not None and country != "World":
-                if country not in self.agri_df.index.unique():
-                    raise ValueError(f"{country} does not exist in the dataset")
-                # If a country is specified, filter the dataframe to include only that country
-                data = self.agri_df.loc[country, :].copy()
-                title = f"Agricultural Output of {country}"
-            else:
-                data = self.agri_df.copy()
-                title = "Global Agricultural Output"
+        # Filter all exceptions
+        exceptions = ["Central Africa", "Central African Republic", "Central America",
+                      "Central Asia", "Central Europe", "Developed Asia", "Developed countries",
+                      "East Africa", "Eastern Europe", "Europe", "Former Soviet Union",
+                      "High income", "Horn of Africa", "Latin America and the Caribbean",
+                      "Least developed countries", "Low income", "Lower-middle income",
+                      "North Africa", "Northeast Asia", "Northern Europe", "Oceania",
+                      "Pacific", "Sahel", "South Asia", "Southeast Asia", "Southern Africa",
+                      "Southern Europe", "Sub-Saharan Africa", "Upper-middle income",
+                      "West Africa", "Western Europe", "World", "West Asia"]
+        # If no country, an empty list or "World" is specified, select all unique countries
+        if country is None or country == [] or country == "World":
+            countries = [x for x in self.agri_df.index.unique() if x not in exceptions]
+        # If a single country is specified, plot an area chart for that country
+        elif isinstance(country, str):
+            countries = [country]
+        # If a list of countries is specified, plot area charts for each country one after the other
+        else:
+            countries = country
+
+        # If no country if "World" is specified, plot the sum of the outputs for all countries
+        if country is None or country == [] or country == "World":
+            data = self.agri_df.loc[countries].copy().groupby("Year").sum()
+            title = "Global Agricultural Output"
             # Create a subset from original dataset with columns containing '_output_'
             data = data.pivot_table(
                 index="Year", values=[col for col in data.columns if "_output_" in col]
             )
+            data.rename(columns = {"animal_output_quantity": "Animal", "crop_output_quantity":
+                                   "Crop", "fish_output_quantity": "Fish"}, inplace = True)
             # Normalize the data if necessary
             if normalize:
                 data = data.div(data.sum(axis=1), axis=0)
@@ -215,10 +229,32 @@ class Agros:
             axes = data.plot.area(title=title, stacked=True)
             axes.set_xlabel("Year")
             axes.set_ylabel("Output")
-            axes.plot()
 
-            continue
-            
+        else:
+            for cou in countries:
+                # Check if the specified country exists in the dataset
+                if cou not in self.agri_df.index.unique():
+                    raise ValueError(f"{cou} does not exist in the dataset")
+                if cou in exceptions:
+                    raise ValueError(f"{cou} is not a country")
+                # If a country is specified, filter the dataframe to include only that country
+                data = self.agri_df.loc[cou, :].copy()
+                title = f"Agricultural Output of {cou}"
+                # Create a subset from original dataset with columns containing '_output_'
+                data = data.pivot_table(
+                    index="Year", values=[col for col in data.columns if "_output_" in col]
+                )
+                data.rename(columns = {"animal_output_quantity": "Animal", "crop_output_quantity":
+                                       "Crop", "fish_output_quantity": "Fish"}, inplace = True)
+                # Normalize the data if necessary
+                if normalize:
+                    data = data.div(data.sum(axis=1), axis=0)
+                # Plot the area chart
+                axes = data.plot.area(title=title, stacked=True)
+                axes.set_xlabel("Year")
+                axes.set_ylabel("Output")
+
+        return axes
 
     def total_output(self, countries: Union[str, list] = None) -> plt.Axes:
         """
@@ -338,6 +374,6 @@ class Agros:
         ]
 
         plt.legend(handles=legend_elements, loc='upper left',
-                   title='The diameter of each dot\n shows the irrigation\nquantity in a country.\n')
+                   title='The diameter of each dot\n shows irrigation\nquantity in a country.\n')
 
         return axes
