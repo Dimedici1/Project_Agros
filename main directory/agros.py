@@ -113,7 +113,8 @@ class Agros:
                       "North Africa", "Northeast Asia", "Northern Europe", "Oceania",
                       "Pacific", "Sahel", "South Asia", "Southeast Asia", "Southern Africa",
                       "Southern Europe", "Sub-Saharan Africa", "Upper-middle income",
-                      "West Africa", "Western Europe", "World", "West Asia"]
+                      "West Africa", "Western Europe", "World", "West Asia","Asia",
+                      "North America", "Caribbean"]
         list_of_countries = [x for x in list_of_countries if x not in exceptions]
         return list_of_countries
 
