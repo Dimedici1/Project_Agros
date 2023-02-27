@@ -228,7 +228,7 @@ class Agros:
             # Plot the area chart
             axes = data.plot.area(title=title, stacked=True)
             axes.set_xlabel("Year")
-            axes.set_ylabel("Output")
+            axes.set_ylabel("Output (1000$)")
 
         else:
             for cou in countries:
@@ -252,7 +252,7 @@ class Agros:
                 # Plot the area chart
                 axes = data.plot.area(title=title, stacked=True)
                 axes.set_xlabel("Year")
-                axes.set_ylabel("Output")
+                axes.set_ylabel("Output (1000$)")
 
         return axes
 
