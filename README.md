@@ -38,7 +38,7 @@ The dataset used in this project is provided by the U.S. Department of Agricultu
 
 
 ## Installation
-To use Agros, you need to have Python 3.x installed on your system. You can then download the source code [here](https://gitlab.com/florianpreiss/group_02/-/tree/main) or you can clone this repository.
+To use Agros, you need to have Python 3.x installed on your system. You can then download the source code [here](https://gitlab.com/florianpreiss/group_02/-/archive/main/group_02-main.zip) or you can clone this repository.
 
 ```
 git clone https://gitlab.com/florianpreiss/group_02.git
