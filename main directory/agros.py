@@ -16,7 +16,7 @@ Requirements:
 """
 
 import os
-from typing import Union
+from typing import List, Union
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -158,7 +158,7 @@ class Agros:
 
         return corr_heatmap
 
-    def area_chart(self, country: Union[str, None, list[str]] = None, normalize: bool = False
+    def area_chart(self, country: Union[str, None, List[str]] = None, normalize: bool = False
                   ) -> plt.Axes:
         """
         Plots an area chart of the distinct "_output_" columns. If a single country or a list of
@@ -192,19 +192,9 @@ class Agros:
         ValueError
             If any of the specified countries is not a country.
         """
-        # Filter all exceptions
-        exceptions = ["Central Africa", "Central African Republic", "Central America",
-                      "Central Asia", "Central Europe", "Developed Asia", "Developed countries",
-                      "East Africa", "Eastern Europe", "Europe", "Former Soviet Union",
-                      "High income", "Horn of Africa", "Latin America and the Caribbean",
-                      "Least developed countries", "Low income", "Lower-middle income",
-                      "North Africa", "Northeast Asia", "Northern Europe", "Oceania",
-                      "Pacific", "Sahel", "South Asia", "Southeast Asia", "Southern Africa",
-                      "Southern Europe", "Sub-Saharan Africa", "Upper-middle income",
-                      "West Africa", "Western Europe", "World", "West Asia"]
         # If no country, an empty list or "World" is specified, select all unique countries
         if country is None or country == [] or country == "World":
-            countries = [x for x in self.agri_df.index.unique() if x not in exceptions]
+            countries = self.country_list()
         # If a single country is specified, plot an area chart for that country
         elif isinstance(country, str):
             countries = [country]
@@ -235,7 +225,7 @@ class Agros:
                 # Check if the specified country exists in the dataset
                 if cou not in self.agri_df.index.unique():
                     raise ValueError(f"{cou} does not exist in the dataset")
-                if cou in exceptions:
+                if cou not in self.country_list():
                     raise ValueError(f"{cou} is not a country")
                 # If a country is specified, filter the dataframe to include only that country
                 data = self.agri_df.loc[cou, :].copy()
