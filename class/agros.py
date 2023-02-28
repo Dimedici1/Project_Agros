@@ -82,7 +82,7 @@ class Agros:
             agricultural_total_factor_productivity.csv
         """
         file_path = os.path.join(
-            "../downloads/agricultural_total_factor_productivity.csv"
+            "downloads/agricultural_total_factor_productivity.csv"
         )
 
         if not os.path.isfile(file_path):
