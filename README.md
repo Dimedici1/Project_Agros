@@ -91,12 +91,20 @@ Agros provides a Agros class with several methods for analyzing and visualizing 
 **Import class**
 
 ```
+import sys
+sys.path.append(sys.path[0] + "\\class")
 from agros import Agros
 ```
 
 **Create an instance 'agros' of the Agros class**
 
 ```
+FILE_URL = (
+    "https://github.com/owid/owid-datasets/blob/"
+    "693acdec5821af0a1b73523905d2a6ccefd6d509/datasets/"
+    "Agricultural%20total%20factor%20productivity%20(USDA)/"
+    "Agricultural%20total%20factor%20productivity%20(USDA).csv?raw=true"
+)
 agros = Agros(FILE_URL)
 ```
 
