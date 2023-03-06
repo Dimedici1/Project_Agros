@@ -173,10 +173,19 @@ class Agros:
             linewidths=0.5,
         )
 
-        axes.set_title("Correlation Matrix of Quantity-Related Columns")
+        axes.set_title("Correlation Matrix of Quantity-Related Columns",
+                       fontdict={'size':16, 'weight':'bold'}, pad=20)
         plt.xticks(rotation=45, ha="right")
 
-        return corr_heatmap
+        # Add an annotation
+        axes.annotate("Source: International Agricultural Productivity,"
+                      "USDA Economic Research Service, 2022",
+                      xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
+                      ha='center', va='center', annotation_clip=False,
+                      xytext=(0, 20), textcoords='offset points',
+                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+
+        return plt.show(corr_heatmap)
 
     def area_chart(self, country: Union[str, None, List[str]] = None, normalize: bool = False
                   ) -> plt.Axes:
@@ -218,6 +227,9 @@ class Agros:
         if not isinstance(normalize, bool):
             raise TypeError("normalize parameter must be a boolean value (True or False)")
 
+        # Define a color scheme for the areas
+        colors = ["#43B02A", "#F9A71C", "#00A3E0"]
+
         # If no country or "World" is specified, plot the sum of the outputs for all countries
         if country in [None, [], "World"]:
             countries = self.country_list()
@@ -229,13 +241,30 @@ class Agros:
             )
             data.rename(columns = {"animal_output_quantity": "Animal", "crop_output_quantity":
                                    "Crop", "fish_output_quantity": "Fish"}, inplace = True)
+
             # Normalize the data if necessary
             if normalize:
                 data = data.div(data.sum(axis=1), axis=0)
+
             # Plot the area chart
-            axes = data.plot.area(title=title, stacked=True)
-            axes.set_xlabel("Year")
-            axes.set_ylabel("Output (1000$)")
+            axes = data.plot.area(stacked=True, color=colors, alpha=0.8, linewidth=0)
+            axes.set_xlabel("Year", fontsize=12, labelpad=10)
+            axes.set_ylabel("Output (1000$)", fontsize=12, labelpad=10)
+            axes.tick_params(axis='both', labelsize=10)
+            axes.grid(axis='y', alpha=0.3)
+            axes.set_title(title, fontdict={'size':16, 'weight':'bold'}, pad=20)
+
+            # Add a legend
+            handles, labels = axes.get_legend_handles_labels()
+            axes.legend(handles, labels, fontsize=12, loc='upper left', bbox_to_anchor=(1.05, 1))
+
+            # Add an annotation
+            axes.annotate("Source: International Agricultural Productivity,"
+                          "USDA Economic Research Service, 2022",
+                          xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
+                          ha='center', va='center', annotation_clip=False,
+                          xytext=(0, 20), textcoords='offset points',
+                          bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
 
         else:
             # Checks if input is a string and converts it to a list
@@ -266,15 +295,33 @@ class Agros:
                 )
                 data.rename(columns = {"animal_output_quantity": "Animal", "crop_output_quantity":
                                        "Crop", "fish_output_quantity": "Fish"}, inplace = True)
+
                 # Normalize the data if necessary
                 if normalize:
                     data = data.div(data.sum(axis=1), axis=0)
-                # Plot the area chart
-                axes = data.plot.area(title=title, stacked=True)
-                axes.set_xlabel("Year")
-                axes.set_ylabel("Output (1000$)")
 
-        return axes
+                # Plot the area chart
+                axes = data.plot.area(stacked=True, color=colors, alpha=0.8, linewidth=0)
+                axes.set_xlabel("Year", fontsize=12, labelpad=10)
+                axes.set_ylabel("Output (1000$)", fontsize=12, labelpad=10)
+                axes.tick_params(axis='both', labelsize=10)
+                axes.grid(axis='y', alpha=0.3)
+                axes.set_title(title, fontdict={'size':16, 'weight':'bold'}, pad=20)
+
+                # Add a legend
+                handles, labels = axes.get_legend_handles_labels()
+                axes.legend(handles, labels, fontsize=12, loc='upper left',
+                            bbox_to_anchor=(1.05, 1))
+
+                # Add an annotation
+                axes.annotate("Source: International Agricultural Productivity,"
+                              "USDA Economic Research Service, 2022",
+                              xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
+                              ha='center', va='center', annotation_clip=False,
+                              xytext=(0, 20), textcoords='offset points',
+                              bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+
+        return plt.show(axes)
 
     def total_output(self, countries: Union[str, list] = None) -> plt.Axes:
         """
@@ -322,12 +369,29 @@ class Agros:
                 values=[col for col in temporary.columns if "_output_" in col],
             )
             data[country] = temporary.sum(axis=1)
-        # Plot the resulting DataFrame
-        axes = data.plot.area(title="Total Output per Country", stacked=True)
-        axes.set_xlabel("Year")
-        axes.set_ylabel("Total Output")
 
-        return axes
+        # Plot the resulting DataFrame
+        axes = data.plot.area(stacked=True, alpha=0.8, linewidth=0)
+        axes.set_xlabel("Year", fontsize=12, labelpad=10)
+        axes.set_ylabel("Total Output (1000$)", fontsize=12, labelpad=10)
+        axes.tick_params(axis='both', labelsize=10)
+        axes.grid(axis='y', alpha=0.3)
+        axes.set_title("Total Output per Country", fontdict={'size':16, 'weight':'bold'}, pad=20)
+
+        # Add a legend
+        handles, labels = axes.get_legend_handles_labels()
+        axes.legend(handles, labels, fontsize=12, loc='upper left',
+                    bbox_to_anchor=(1.05, 1))
+
+        # Add an annotation
+        axes.annotate("Source: International Agricultural Productivity,"
+                      "USDA Economic Research Service, 2022",
+                      xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
+                      ha='center', va='center', annotation_clip=False,
+                      xytext=(0, 20), textcoords='offset points',
+                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+
+        return plt.show(axes)
 
     def gapminder(self, year: int, logscale: bool = False) -> plt.Axes:
         """
@@ -366,7 +430,6 @@ class Agros:
 
         # Create the scatter plot
         axes = dataframe.plot.scatter(
-            title="Effect of Fertilizer and Irrigation Quantity on Output",
             x="fertilizer_quantity",
             y="output_quantity",
             s=irrigation_quantity_scaled,
@@ -393,12 +456,28 @@ class Agros:
                         label=f'Small ({min_size})')
         ]
 
-        plt.legend(handles=legend_elements, loc='upper left',
-                   title='The diameter of each dot\n shows irrigation\nquantity in a country.\n')
+        axes.legend(handles=legend_elements, loc='upper left',
+                   title='The diameter of each\ndot shows the irrigation\nquantity in a country.\n',
+                   bbox_to_anchor=(1.02, 1), borderaxespad=0)
 
-        return axes
+        axes.set_title("Effect of Fertilizer and Irrigation Quantity on Output in " + str(year),
+                       fontdict={'size': 16, 'weight': 'bold'}, pad=20)
+        axes.set_xlabel("Fertilizer Quantity", fontsize=12, labelpad=10)
+        axes.set_ylabel("Output Quantity", fontsize=12, labelpad=10)
+        axes.tick_params(axis='both', labelsize=10)
+        axes.grid(axis='both', alpha=0.3)
 
-    def predictor(self, countries: List[str]) ->  plt.Axes:
+        # Add an annotation
+        axes.annotate("Source: International Agricultural Productivity,"
+                      "USDA Economic Research Service, 2022",
+                      xy=(0.5, -0.32), xycoords="axes fraction", fontsize=9,
+                      ha='center', va='center', annotation_clip=False,
+                      xytext=(0, 20), textcoords='offset points',
+                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+
+        return plt.show(axes)
+
+    def predictor(self, countries: List[str]) -> plt.Axes:
         """
         Predicts the TFP (Total Factor Productivity) for up to three countries using
         ARIMA forecasting.
@@ -429,36 +508,56 @@ class Agros:
                             {self.country_list()}')
 
         color_index = 0
+        fig, axes = plt.subplots()
         for country in country_plot:
             data = self.agri_df.loc[country].set_index('Year')[['tfp']]
-            data.index = pd.to_datetime(data.index, format = '%Y')
+            data.index = pd.to_datetime(data.index, format='%Y')
             # Fit the several
             stepwise_fit = auto_arima(data['tfp'],
-                                      start_p = 1,
-                                      start_q = 1,
-                                      max_p = 3,
-                                      max_q = 3,
-                                      m = 1,
-                                      start_P = 0,
-                                      seasonal = False,
-                                      d = None,
-                                      D = 1,
-                                      #trace = True,
-                                      error_action ='ignore',
-                                      suppress_warnings = True,
-                                      stepwise = True)
+                                      start_p=1,
+                                      start_q=1,
+                                      max_p=3,
+                                      max_q=3,
+                                      m=1,
+                                      start_P=0,
+                                      seasonal=False,
+                                      d=None,
+                                      D=1,
+                                      # trace=True,
+                                      error_action='ignore',
+                                      suppress_warnings=True,
+                                      stepwise=True)
 
             n_periods = 2050 - max(data.index).year
 
-            prediction = pd.DataFrame(stepwise_fit.predict(n_periods = n_periods))
-            prediction['Time'] = pd.date_range(start='2020-01-01', periods = n_periods, freq = 'YS')
+            prediction = pd.DataFrame(stepwise_fit.predict(n_periods=n_periods))
+            prediction['Time'] = pd.date_range(start='2020-01-01', periods=n_periods, freq='YS')
             prediction.set_index('Time', inplace=True)
 
             colors = ['blue', 'green', 'red']
-            plt.plot(data, color = colors[color_index], label = country)
-            plt.plot(prediction, color = colors[color_index], linestyle = 'dashed')
+            axes.plot(data, color=colors[color_index], label=country)
+            axes.plot(prediction, color=colors[color_index], linestyle='dashed')
 
             color_index += 1
 
-        plt.title('Evolution of TFP Metric Over Time\n(Dashed Line is ARIMA Forecast)')
-        plt.legend()
+        axes.set_title('Evolution of TFP Metric Over Time\n(Dashed Line is ARIMA Forecast)',
+                       fontdict={'size': 14, 'weight': 'bold'}, pad=20)
+        axes.set_xlabel("Year", fontsize=12, labelpad=10)
+        axes.set_ylabel("TFP", fontsize=12, labelpad=10)
+        axes.tick_params(axis='both', labelsize=10)
+        axes.grid(axis='y', alpha=0.3)
+
+        # Add a legend
+        handles, labels = axes.get_legend_handles_labels()
+        axes.legend(handles, labels, fontsize=12, loc='upper left',
+                    bbox_to_anchor=(1.05, 1))
+
+        # Add an annotation
+        axes.annotate("Source: International Agricultural Productivity,"
+                      "USDA Economic Research Service, 2022",
+                      xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
+                      ha='center', va='center', annotation_clip=False,
+                      xytext=(0, 20), textcoords='offset points',
+                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+
+        return plt.show(fig, axes)
