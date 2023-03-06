@@ -56,10 +56,12 @@ class Agros:
         agricultural dataframe and returns a heatmap plot using seaborn.
 
     area_chart():
-        Plots an area chart of the distinct "_output_" columns. If a country is specified, the
-        chart will show the output for that country only, otherwise the chart will show the sum
-        of the distinct outputs for all countries. If normalize is True, the output will be
-        normalized in relative terms (output will always be 100% for each year).
+        Plots an area chart of the distinct "_output_" columns. If a single country or a list
+        of countries is specified, the method will plot area charts for each country.
+        If no country, an empty list or "World" is specified, the method will plot the sum
+        of the distinct outputs for all countries.
+        If normalize is True, the output will be normalized in relative terms
+        (output will always be 100% for each year).
 
     total_output():
         Plots the total of the distinct "_output_" columns per year for each country that
@@ -205,23 +207,20 @@ class Agros:
         Raises
         ------
         ValueError
-            If any of the specified countries does not exist in the dataset.
+            If any of the specified countries is not a country of the dataset.
 
-        ValueError
-            If any of the specified countries is not a country.
+        TypeError
+            If normalize parameter is not a boolean value (True or False).
+
+        TypeError
+            If input for the country parameter is not a string or a list of strings.
         """
-        # If no country, an empty list or "World" is specified, select all unique countries
-        if country is None or country == [] or country == "World":
-            countries = self.country_list()
-        # If a single country is specified, plot an area chart for that country
-        elif isinstance(country, str):
-            countries = [country]
-        # If a list of countries is specified, plot area charts for each country one after the other
-        else:
-            countries = country
+        if not isinstance(normalize, bool):
+            raise TypeError("normalize parameter must be a boolean value (True or False)")
 
-        # If no country if "World" is specified, plot the sum of the outputs for all countries
-        if country is None or country == [] or country == "World":
+        # If no country or "World" is specified, plot the sum of the outputs for all countries
+        if country in [None, [], "World"]:
+            countries = self.country_list()
             data = self.agri_df.loc[countries].copy().groupby("Year").sum()
             title = "Global Agricultural Output"
             # Create a subset from original dataset with columns containing '_output_'
@@ -239,15 +238,28 @@ class Agros:
             axes.set_ylabel("Output (1000$)")
 
         else:
+            # Checks if input is a string and converts it to a list
+            if isinstance(country, str):
+                countries = [country]
+            # Checks if input is a list
+            elif isinstance(country, list):
+                countries = country
+            # Checks if input is a list (Or a string that was converted to a list)
+            else:
+                raise TypeError(f"{country} needs to be a string or a list of strings")
+
             for cou in countries:
-                # Check if the specified country exists in the dataset
-                if cou not in self.agri_df.index.unique():
-                    raise ValueError(f"{cou} does not exist in the dataset")
-                if cou not in self.country_list():
-                    raise ValueError(f"{cou} is not a country")
-                # If a country is specified, filter the dataframe to include only that country
-                data = self.agri_df.loc[cou, :].copy()
-                title = f"Agricultural Output of {cou}"
+                # If no country or "World" is specified, plot sum of outputs for all countries
+                if cou in (None, "World"):
+                    data = self.agri_df.loc[self.country_list()].copy().groupby("Year").sum()
+                    title = "Global Agricultural Output"
+                # Check if the input is an actual country
+                if cou not in self.country_list() and cou is not None and cou != "World":
+                    raise ValueError(f"{cou} is not a country of the dataset")
+                if cou in self.country_list():
+                    # If a country is specified, filter the dataframe to include only that country
+                    data = self.agri_df.loc[cou, :].copy()
+                    title = f"Agricultural Output of {cou}"
                 # Create a subset from original dataset with columns containing '_output_'
                 data = data.pivot_table(
                     index="Year", values=[col for col in data.columns if "_output_" in col]
