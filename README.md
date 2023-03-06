@@ -85,6 +85,10 @@ Plots the total of the distinct "output" columns per year for each country that 
 
 Plots a scatter plot to demonstrate the relationship between fertilizer and irrigation quantity on output for a specific year.
 
+**predictor(self, countries: List[str]) -> plt.Axes**
+
+Predicts the TFP (Total Factor Productivity) for up to three countries using ARIMA forecasting.
+
 ## Usage
 Agros provides a Agros class with several methods for analyzing and visualizing data on agricultural total factor productivity. Here's an example of how to use it:
 
@@ -122,6 +126,7 @@ agros.corr_quantity()
 agros.area_chart()
 agros.total_output()
 agros.gapminder()
+agros.predictor()
 ```
 
 For more examples, please refer to the showcase notebook (showcase.ipynb) in this repository.
@@ -129,10 +134,10 @@ For more examples, please refer to the showcase notebook (showcase.ipynb) in thi
 ## Authors
 Agros was developed by Group 2 as part of a project on agricultural economics. The authors are:
 
-- Florian Preiss (@florianpreiss)
-- Anton Badort (@ABdrt)
-- Lorenzo Schumann (@Dimedici)
-- Luca Carocci (@carocciluca)
+- Florian Preiss, 54385, 54385@novasbe.pt (@florianpreiss)
+- Anton Badort, 55358, 55358@novasbe.pt (@ABdrt)
+- Lorenzo Schumann, 56178, 56178@novasbe.pt (@Dimedici)
+- Luca Carocci, 53942, 53942@novasbe.pt (@carocciluca)
 
 ## Acknowledgment
 We would like to thank the USDA for providing the data used in this project.
