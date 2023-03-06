@@ -68,6 +68,10 @@ class Agros:
     gapminder():
         Plots a scatter plot to demonstrate the relationship between fertilizer and
         irrigation quantity on output for a specific year.
+
+    predictor():
+        Predicts the TFP (Total Factor Productivity) for up to three countries using
+        ARIMA forecasting.
     """
 
     def __init__(self, file_url: str):
