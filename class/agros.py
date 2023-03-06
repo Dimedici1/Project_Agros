@@ -17,10 +17,14 @@ Requirements:
 
 import os
 from typing import List, Union
+import warnings
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from pmdarima import auto_arima
+
+warnings.filterwarnings('ignore')
 
 
 class Agros:
@@ -38,9 +42,11 @@ class Agros:
     Methods
     -------
     import_file():
-        Checks if the agricultural data file is in the downloads folder and,
-        if not, downloads it from the web. If it is already present in the downloads
-        folder, the file is loaded from there and returned as a pandas dataframe.
+        Checks if the downloads folder exists and if agricultural_total_factor_productivity.csv
+        is in the downloads folder. If not, the downloads folder is created and/or the the
+        agricultural_total_factor_productivity.csv is downloaded from the web. If both the
+        folder and the file exist, the file is loaded from the downloads folder and returned as
+        a pandas dataframe.
 
     country_list():
         Creates a list of all unique countries/regions available in the dataset.
@@ -62,6 +68,10 @@ class Agros:
     gapminder():
         Plots a scatter plot to demonstrate the relationship between fertilizer and
         irrigation quantity on output for a specific year.
+
+    predictor():
+        Predicts the TFP (Total Factor Productivity) for up to three countries using
+        ARIMA forecasting.
     """
 
     def __init__(self, file_url: str):
@@ -70,10 +80,11 @@ class Agros:
 
     def import_file(self) -> pd.DataFrame:
         """
-        Checks if agricultural_total_factor_productivity.csv
-        is in the downloads folder and, if not, downloads
-        it from the web. If it is there, the file is loaded from the
-        downloads folder and returned as a pandas dataframe.
+        Checks if the downloads folder exists and if agricultural_total_factor_productivity.csv
+        is in the downloads folder. If not, the downloads folder is created and/or the the
+        agricultural_total_factor_productivity.csv is downloaded from the web. If both the
+        folder and the file exist, the file is loaded from the downloads folder and returned as
+        a pandas dataframe.
 
         Returns
         ---------------
@@ -81,10 +92,17 @@ class Agros:
             A table with information from
             agricultural_total_factor_productivity.csv
         """
-        file_path = os.path.join(
-            "downloads/agricultural_total_factor_productivity.csv"
-        )
+        downloads_dir = ('../downloads')
+        check_downloads_dir = os.path.isdir(downloads_dir)
 
+        # If folder doesn't exist, create it.
+        if not check_downloads_dir:
+            os.makedirs(downloads_dir)
+
+        file_path = os.path.join(
+            "../downloads/agricultural_total_factor_productivity.csv"
+        )
+        # If file doesn't exist, create it.
         if not os.path.isfile(file_path):
             file_df = pd.read_csv(self.file_url, index_col=0)
             file_df.to_csv(file_path)
@@ -367,3 +385,68 @@ class Agros:
                    title='The diameter of each dot\n shows irrigation\nquantity in a country.\n')
 
         return axes
+
+    def predictor(self, countries: List[str]) ->  plt.Axes:
+        """
+        Predicts the TFP (Total Factor Productivity) for up to three countries using
+        ARIMA forecasting.
+
+        Parameters
+        ----------
+        countries: List[str]
+            A list of up to three country names to be included in the TFP prediction.
+
+        Returns
+        -------
+        axes: plt.Axes
+            A matplotlib axes object containing the plot of TFP for the selected countries
+            and their ARIMA forecast.
+
+        Raises
+        ------
+        TypeError:
+            If the number of valid country names selected is not between 1 and 3.
+        """
+        country_plot = []
+        for country in countries:
+            if country in self.country_list():
+                country_plot.append(country)
+
+        if len(country_plot) == 0 or len(country_plot) > 3:
+            raise TypeError(f'Please select up to three of the following countries \
+                            {self.country_list()}')
+
+        color_index = 0
+        for country in country_plot:
+            data = self.agri_df.loc[country].set_index('Year')[['tfp']]
+            data.index = pd.to_datetime(data.index, format = '%Y')
+            # Fit the several
+            stepwise_fit = auto_arima(data['tfp'],
+                                      start_p = 1,
+                                      start_q = 1,
+                                      max_p = 3,
+                                      max_q = 3,
+                                      m = 1,
+                                      start_P = 0,
+                                      seasonal = False,
+                                      d = None,
+                                      D = 1,
+                                      #trace = True,
+                                      error_action ='ignore',
+                                      suppress_warnings = True,
+                                      stepwise = True)
+
+            n_periods = 2050 - max(data.index).year
+
+            prediction = pd.DataFrame(stepwise_fit.predict(n_periods = n_periods))
+            prediction['Time'] = pd.date_range(start='2020-01-01', periods = n_periods, freq = 'YS')
+            prediction.set_index('Time', inplace=True)
+
+            colors = ['blue', 'green', 'red']
+            plt.plot(data, color = colors[color_index], label = country)
+            plt.plot(prediction, color = colors[color_index], linestyle = 'dashed')
+
+            color_index += 1
+
+        plt.title('Evolution of TFP Metric Over Time\n(Dashed Line is ARIMA Forecast)')
+        plt.legend()
