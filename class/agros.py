@@ -94,6 +94,7 @@ class Agros:
             A table with information from
             agricultural_total_factor_productivity.csv
         """
+        # Check if downloads folder exists
         downloads_dir = ('../downloads')
         check_downloads_dir = os.path.isdir(downloads_dir)
 
@@ -498,21 +499,25 @@ class Agros:
         TypeError:
             If the number of valid country names selected is not between 1 and 3.
         """
+        # Check if country is in dataset and append it to the country_plot list
         country_plot = []
         for country in countries:
             if country in self.country_list():
                 country_plot.append(country)
 
+        # Raise TypeError if list with valid country names is 0 or larger than 3
         if len(country_plot) == 0 or len(country_plot) > 3:
             raise TypeError(f'Please select up to three of the following countries \
                             {self.country_list()}')
 
+        # Initialize plot
         color_index = 0
         fig, axes = plt.subplots()
+
         for country in country_plot:
+            # Use TFP column for each country to find ARIMA prediction parameters using stepwise fit
             data = self.agri_df.loc[country].set_index('Year')[['tfp']]
             data.index = pd.to_datetime(data.index, format='%Y')
-            # Fit the several
             stepwise_fit = auto_arima(data['tfp'],
                                       start_p=1,
                                       start_q=1,
@@ -530,16 +535,19 @@ class Agros:
 
             n_periods = 2050 - max(data.index).year
 
+            # Create dataframe with TFP predictios
             prediction = pd.DataFrame(stepwise_fit.predict(n_periods=n_periods))
             prediction['Time'] = pd.date_range(start='2020-01-01', periods=n_periods, freq='YS')
             prediction.set_index('Time', inplace=True)
 
+            # Plot line of each country in a different color (dashed lines for predicitions)
             colors = ['blue', 'green', 'red']
             axes.plot(data, color=colors[color_index], label=country)
             axes.plot(prediction, color=colors[color_index], linestyle='dashed')
 
             color_index += 1
 
+        # Finalize plot
         axes.set_title('Evolution of TFP Metric Over Time\n(Dashed Line is ARIMA Forecast)',
                        fontdict={'size': 14, 'weight': 'bold'}, pad=20)
         axes.set_xlabel("Year", fontsize=12, labelpad=10)
