@@ -543,15 +543,17 @@ class Agros:
             # Plot line of each country in a different color (dashed lines for predicitions)
             colors = ['blue', 'green', 'red']
             axes.plot(data, color=colors[color_index], label=country)
-            axes.plot(prediction, color=colors[color_index], linestyle='dashed')
+            axes.plot(prediction, color=colors[color_index],
+                      linestyle='dashed',
+                      label=f'{country} (ARIMA Forecast)')
 
             color_index += 1
 
         # Finalize plot
-        axes.set_title('Evolution of TFP Metric Over Time\n(Dashed Line is ARIMA Forecast)',
+        axes.set_title('Evolution of Total Factor Productivity (TFP) Over Time',
                        fontdict={'size': 14, 'weight': 'bold'}, pad=20)
         axes.set_xlabel("Year", fontsize=12, labelpad=10)
-        axes.set_ylabel("TFP", fontsize=12, labelpad=10)
+        axes.set_ylabel("Total Factor Productivity (TFP)", fontsize=12, labelpad=10)
         axes.tick_params(axis='both', labelsize=10)
         axes.grid(axis='y', alpha=0.3)
 
