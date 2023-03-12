@@ -39,7 +39,7 @@ class Agros:
 
     agri_df : str
         A dataframe with data from the agricultural data file.
-        
+
     merge_dict : dict()
         A dictionary to adapt the country names in the geo_data dataset.
 
@@ -76,7 +76,7 @@ class Agros:
     gapminder():
         Plots a scatter plot to demonstrate the relationship between fertilizer and
         irrigation quantity on output for a specific year.
-    
+
     choropleth():
         Plots a coropleth map that shows the tfp for every country in a specific year.
 
@@ -110,11 +110,11 @@ class Agros:
         Returns
         ---------------
         tuple containing:
-        
+
             agri_df: pandas dataframe
                 A table with information from
                 agricultural_total_factor_productivity.csv
-                
+
             geo_data: A geopandas.geodataframe.GeoDataFrame file.
         """
         # Check if downloads folder exists
@@ -288,7 +288,7 @@ class Agros:
 
             # Add an annotation
             axes.annotate("Source: International Agricultural Productivity,"
-                          "USDA Economic Research Service, 2022",
+                          " USDA Economic Research Service, 2022",
                           xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                           ha='center', va='center', annotation_clip=False,
                           xytext=(0, 20), textcoords='offset points',
@@ -541,7 +541,7 @@ class Agros:
                       legend = True, #Decide to show legend or not
                       figsize = [20,10],\
                       legend_kwds = {'label': "tfp per country"}) #Name the legend
-        
+
         # Add an annotation
         axes.annotate("Source: Made with Natural Earth. Free vector and raster map"
                       "data @ naturalearthdata.com, 2022",
@@ -549,7 +549,7 @@ class Agros:
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
                       bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
-        
+
         return plt.show(axes)
 
     def predictor(self, countries: List[str]) -> plt.Axes:
