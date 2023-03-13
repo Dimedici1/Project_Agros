@@ -23,6 +23,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from pmdarima import auto_arima
+import geopandas as gpd
 
 warnings.filterwarnings('ignore')
 
@@ -39,6 +40,9 @@ class Agros:
     agri_df : str
         A dataframe with data from the agricultural data file.
 
+    merge_dict : dict()
+        A dictionary to adapt the country names in the geo_data dataset.
+
     Methods
     -------
     import_file():
@@ -47,6 +51,8 @@ class Agros:
         agricultural_total_factor_productivity.csv is downloaded from the web. If both the
         folder and the file exist, the file is loaded from the downloads folder and returned as
         a pandas dataframe.
+        Furthermore, it downloads geographical information and stores it as a geopandas.
+        geodataframe.GeoDataFrame.
 
     country_list():
         Creates a list of all unique countries/regions available in the dataset.
@@ -71,6 +77,9 @@ class Agros:
         Plots a scatter plot to demonstrate the relationship between fertilizer and
         irrigation quantity on output for a specific year.
 
+    choropleth():
+        Plots a coropleth map that shows the tfp for every country in a specific year.
+
     predictor():
         Predicts the TFP (Total Factor Productivity) for up to three countries using
         ARIMA forecasting.
@@ -79,23 +88,37 @@ class Agros:
     def __init__(self, file_url: str):
         self.file_url = file_url
         self.agri_df = None
+        self.merge_dict = {
+            "United States of America": "United States",
+            "W. Sahara": "Sub-Saharan Africa",
+            "Dem. Rep. Congo": "Democratic Republic of Congo",
+            "Dominican Rep.": "Dominican Republic",
+            "Timor-Leste": "Timor",
+            "Central African Rep.": "Central African Republic"
+        }
 
-    def import_file(self) -> pd.DataFrame:
+    def import_file(self) -> tuple:
         """
         Checks if the downloads folder exists and if agricultural_total_factor_productivity.csv
         is in the downloads folder. If not, the downloads folder is created and/or the the
         agricultural_total_factor_productivity.csv is downloaded from the web. If both the
         folder and the file exist, the file is loaded from the downloads folder and returned as
         a pandas dataframe.
+        Furthermore, it downloads geographical information and stores it as a geopandas.
+        geodataframe.GeoDataFrame.
 
         Returns
         ---------------
-        agri_df: pandas dataframe
-            A table with information from
-            agricultural_total_factor_productivity.csv
+        tuple containing:
+
+            agri_df: pandas dataframe
+                A table with information from
+                agricultural_total_factor_productivity.csv
+
+            geo_data: A geopandas.geodataframe.GeoDataFrame file.
         """
         # Check if downloads folder exists
-        downloads_dir = ('../downloads')
+        downloads_dir = '../downloads'
         check_downloads_dir = os.path.isdir(downloads_dir)
 
         # If folder doesn't exist, create it.
@@ -111,7 +134,11 @@ class Agros:
             file_df.to_csv(file_path)
 
         self.agri_df = pd.read_csv(file_path, index_col=0)
-        return self.agri_df
+
+        # Download geo data
+        geo_data = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+
+        return self.agri_df, geo_data
 
     def country_list(self) -> list:
         """
@@ -180,11 +207,11 @@ class Agros:
 
         # Add an annotation
         axes.annotate("Source: International Agricultural Productivity,"
-                      "USDA Economic Research Service, 2022",
+                      " USDA Economic Research Service, 2022",
                       xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
-                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                      bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(corr_heatmap)
 
@@ -261,11 +288,11 @@ class Agros:
 
             # Add an annotation
             axes.annotate("Source: International Agricultural Productivity,"
-                          "USDA Economic Research Service, 2022",
+                          " USDA Economic Research Service, 2022",
                           xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                           ha='center', va='center', annotation_clip=False,
                           xytext=(0, 20), textcoords='offset points',
-                          bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                          bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         else:
             # Checks if input is a string and converts it to a list
@@ -316,11 +343,11 @@ class Agros:
 
                 # Add an annotation
                 axes.annotate("Source: International Agricultural Productivity,"
-                              "USDA Economic Research Service, 2022",
+                              " USDA Economic Research Service, 2022",
                               xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                               ha='center', va='center', annotation_clip=False,
                               xytext=(0, 20), textcoords='offset points',
-                              bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                              bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(axes)
 
@@ -386,11 +413,11 @@ class Agros:
 
         # Add an annotation
         axes.annotate("Source: International Agricultural Productivity,"
-                      "USDA Economic Research Service, 2022",
+                      " USDA Economic Research Service, 2022",
                       xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
-                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                      bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(axes)
 
@@ -458,23 +485,81 @@ class Agros:
         ]
 
         axes.legend(handles=legend_elements, loc='upper left',
-                   title='The diameter of each\ndot shows the irrigation\nquantity in a country.\n',
+                   title="The diameter of each\ndot shows the irrigation\n"
+                    "quantity (1000 ha) in\na country.\n",
                    bbox_to_anchor=(1.02, 1), borderaxespad=0)
 
         axes.set_title("Effect of Fertilizer and Irrigation Quantity on Output in " + str(year),
                        fontdict={'size': 16, 'weight': 'bold'}, pad=20)
-        axes.set_xlabel("Fertilizer Quantity", fontsize=12, labelpad=10)
-        axes.set_ylabel("Output Quantity", fontsize=12, labelpad=10)
+        axes.set_xlabel("Fertilizer Quantity (t)", fontsize=12, labelpad=10)
+        axes.set_ylabel("Output Quantity ($1000)", fontsize=12, labelpad=10)
         axes.tick_params(axis='both', labelsize=10)
         axes.grid(axis='both', alpha=0.3)
 
         # Add an annotation
         axes.annotate("Source: International Agricultural Productivity,"
-                      "USDA Economic Research Service, 2022",
+                      " USDA Economic Research Service, 2022",
                       xy=(0.5, -0.32), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
-                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                      bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
+
+        return plt.show(axes)
+
+
+    def choropleth(self, year: int = 2019) -> plt.Axes:
+        """
+        Plots a choropleth map that shows the tfp for every country in a specific year.
+
+        Parameters
+        ----------
+        year: int
+            An integer that determines the year that will be selected from the data.
+
+        Returns
+        -------
+        axes: matplotlib.Axes
+            The choropleth chart as a Matplotlib axes object.
+
+        Raises
+        ------
+        ValueError
+            If any of the specified countries does not exist in the dataset.
+
+        ValueError: cannot convert float NaN to integer
+            If a year that is not in the dataset is selected.
+        """
+        # Checks if input is a list (Or a string that was converted to a list)
+        if not isinstance(year, int):
+            raise TypeError(f"{year} needs to be an integer")
+
+        # Get data and geo data and merge it
+        data, geo_data = self.import_file()
+        geo_data['name'] = geo_data['name'].replace(self.merge_dict).fillna(geo_data['name'])
+        merged_data = pd.merge(geo_data, data, left_on="name", right_on="Entity", how="left")
+        merged_data = merged_data[merged_data['Year'] == year]
+
+        #Plot the Choropleth map
+        axes = merged_data.plot(column = 'tfp', #Assign numerical data column
+                      legend = True, #Decide to show legend or not
+                      figsize = [20,10],\
+                      legend_kwds = {'label': "TFP per Country"}) #Name the legend
+
+        # Add a title and axis labels
+        axes.set_title(f"Total Factor Productivity (TFP) per Country in {year}",
+                       fontdict={'size':16, 'weight':'bold'}, pad=20)
+        axes.set_xlabel("Longitude", fontsize=12, labelpad=10)
+        axes.set_ylabel("Latitude", fontsize=12, labelpad=10)
+
+        # Add an annotation
+        axes.annotate("Sources:\n1) International Agricultural Productivity,"
+                      " USDA Economic Research Service, 2022\n"
+                      "2) Made with Natural Earth. Free vector and raster map"
+                      " data @ naturalearthdata.com, 2022",
+                      xy=(0.275, -0.32), xycoords="axes fraction", fontsize=9,
+                      ha='left', va='center', annotation_clip=False,
+                      xytext=(0, 20), textcoords='offset points',
+                      bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(axes)
 
@@ -564,10 +649,10 @@ class Agros:
 
         # Add an annotation
         axes.annotate("Source: International Agricultural Productivity,"
-                      "USDA Economic Research Service, 2022",
+                      " USDA Economic Research Service, 2022",
                       xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
-                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                      bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(fig, axes)
