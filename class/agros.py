@@ -110,7 +110,7 @@ class Agros:
             "North Macedonia": "Macedonia"
         }
 
-    def import_file(self) -> tuple:
+    def import_file(self):
         """
         Checks if the downloads folder exists and if agricultural_total_factor_productivity.csv
         is in the downloads folder. If not, the downloads folder is created and/or the the
