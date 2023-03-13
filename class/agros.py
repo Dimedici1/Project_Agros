@@ -11,8 +11,9 @@ Description:
     data and provides various methods for data analysis.
 
 Requirements:
-    The script imports the following libraries: os, typing.Union, numpy, pandas,
-    seaborn, and matplotlib.pyplot.
+    The script imports the following libraries: os, typing.List, typing.Union,
+    warnings, numpy, pandas, seaborn, matplotlib.pyplot, pmdarima.auto_arima,
+    and geopandas
 """
 
 import os

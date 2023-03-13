@@ -54,7 +54,9 @@ To use Agros, we propose two options:
 The following libraries are required to run the Agros class:
 
 - os
+- typing.List
 - typing.Union
+- warnings
 - numpy
 - pandas
 - seaborn
@@ -101,6 +103,7 @@ The following points will guide you through the virtual environment's installati
     name@device:~$ conda remove -n Agros_Environment --all
     ```
 
+>>>>>>> README.md
 
 ## Methods
 The Agros class provides the following methods:
@@ -109,9 +112,9 @@ The Agros class provides the following methods:
 
 Initializes the Agros class with a file URL to download agricultural data.
 
-**import_file(self) -> pd.DataFrame**
+**import_file(self) -> tuple**
 
-Downloads the agricultural data file if it is not in the downloads folder and returns it as a Pandas DataFrame. If the file is already present in the downloads folder, it will be loaded from there.
+Checks if the downloads folder exists and if agricultural_total_factor_productivity.csv is in the downloads folder. If not, the downloads folder is created and/or the the agricultural_total_factor_productivity.csv is downloaded from the web. If both the folder and the file exist, the file is loaded from the downloads folder and returned as a pandas dataframe. Furthermore, it downloads geographical information and stores it as a geopandas.geodataframe.GeoDataFrame.
 
 **country_list(self) -> list**
 
@@ -121,7 +124,7 @@ Returns a list of all unique countries/regions available in the dataset.
 
 Calculates the correlation matrix for quantity-related columns of the agricultural DataFrame and returns a heatmap plot using Seaborn.
 
-**area_chart(self, country: Union[str, None] = None, normalize: bool = False) -> plt.Axes**
+**area_chart(self, country: Union[str, None, List[str]], normalize: bool) -> plt.Axes**
 
 Plots an area chart of the distinct "output" columns. If a country is specified, the chart will show the output for that country only. Otherwise, the chart will show the sum of the distinct outputs for all countries. If normalize is True, the output will be normalized in relative terms (output will always be 100% for each year).
 
@@ -133,6 +136,10 @@ Plots the total of the distinct "output" columns per year for each country that 
 
 Plots a scatter plot to demonstrate the relationship between fertilizer and irrigation quantity on output for a specific year.
 
+**choropleth(self, year: int) -> plt.Axes**
+
+Plots a choropleth map that shows the tfp for every country in a specific year.
+
 **predictor(self, countries: List[str]) -> plt.Axes**
 
 Predicts the TFP (Total Factor Productivity) for up to three countries using ARIMA forecasting.
@@ -140,11 +147,12 @@ Predicts the TFP (Total Factor Productivity) for up to three countries using ARI
 ## Usage
 Agros provides a Agros class with several methods for analyzing and visualizing data on agricultural total factor productivity. Here's an example of how to use it:
 
-**Import class**
+**Initial imports**
 
 ```
 import sys
-sys.path.append(sys.path[0] + "\\class")
+import pandas as pd
+sys.path.append(sys.path[0] + "/class")
 from agros import Agros
 ```
 
@@ -157,38 +165,42 @@ FILE_URL = (
     "Agricultural%20total%20factor%20productivity%20(USDA)/"
     "Agricultural%20total%20factor%20productivity%20(USDA).csv?raw=true"
 )
+
 agros = Agros(FILE_URL)
 ```
 
 **Load the data**
 
 ```
-agros.import_file()
+data, geo_data = agros.import_file()
 ```
 
 **Analyze the data**
 
 ```
-agros.corr_quantity()
+agros.country_list()
 agros.corr_quantity()
 agros.area_chart()
 agros.total_output()
 agros.gapminder()
+agros.choropleth()
 agros.predictor()
 ```
 
-For more examples, please refer to the showcase notebook (showcase.ipynb) in this repository.
+For more examples, please refer to the showcase notebook (Showcase_Notebook.ipynb) in this repository.
 
 ## Authors
 Agros was developed by Group 2 as part of a project on agricultural economics. The authors are:
 
-- Florian Preiss, 54385, 54385@novasbe.pt (@florianpreiss)
-- Anton Badort, 55358, 55358@novasbe.pt (@ABdrt)
-- Lorenzo Schumann, 56178, 56178@novasbe.pt (@Dimedici)
-- Luca Carocci, 53942, 53942@novasbe.pt (@carocciluca)
+| Name | Student Number | Mail | Gitlab Name |
+| --- | --- | --- | --- |
+| Florian Preiss | 54385 | 54385@novasbe.pt | @florianpreiss |
+| Anton Badort | 55358 | 55358@novasbe.pt | @ABdrt |
+| Lorenzo Schumann | 56178 | 56178@novasbe.pt | @Dimedici |
+| Luca Carocci | 53942 | 53942@novasbe.pt | @carocciluca |
 
 ## Acknowledgment
-We would like to thank the USDA for providing the data used in this project.
+We would like to thank the USDA Economic Research Service for providing the data on international agricultural productivity and Natural Earth for providing the free vector and raster map data used in this project.
 
 ## License
 Agros is released under the GNU General Public License v3.0. See LICENSE for more information.
