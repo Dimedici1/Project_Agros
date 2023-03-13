@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>agros module &mdash; Project Agros 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Project Agros
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">agros module</a><ul>
+<li><a class="reference internal" href="#agros.Agros"><code class="docutils literal notranslate"><span class="pre">Agros</span></code></a><ul>
+<li><a class="reference internal" href="#agros.Agros.file_url"><code class="docutils literal notranslate"><span class="pre">Agros.file_url</span></code></a></li>
+<li><a class="reference internal" href="#agros.Agros.agri_df"><code class="docutils literal notranslate"><span class="pre">Agros.agri_df</span></code></a></li>
+<li><a class="reference internal" href="#agros.Agros.merge_dict"><code class="docutils literal notranslate"><span class="pre">Agros.merge_dict</span></code></a></li>
+<li><a class="reference internal" href="#agros.Agros.area_chart"><code class="docutils literal notranslate"><span class="pre">Agros.area_chart()</span></code></a></li>
+<li><a class="reference internal" href="#agros.Agros.choropleth"><code class="docutils literal notranslate"><span class="pre">Agros.choropleth()</span></code></a></li>
+<li><a class="reference internal" href="#agros.Agros.corr_quantity"><code class="docutils literal notranslate"><span class="pre">Agros.corr_quantity()</span></code></a></li>
+<li><a class="reference internal" href="#agros.Agros.country_list"><code class="docutils literal notranslate"><span class="pre">Agros.country_list()</span></code></a></li>
+<li><a class="reference internal" href="#agros.Agros.gapminder"><code class="docutils literal notranslate"><span class="pre">Agros.gapminder()</span></code></a></li>
+<li><a class="reference internal" href="#agros.Agros.import_file"><code class="docutils literal notranslate"><span class="pre">Agros.import_file()</span></code></a></li>
+<li><a class="reference internal" href="#agros.Agros.predictor"><code class="docutils literal notranslate"><span class="pre">Agros.predictor()</span></code></a></li>
+<li><a class="reference internal" href="#agros.Agros.total_output"><code class="docutils literal notranslate"><span class="pre">Agros.total_output()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Project Agros</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">agros module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/agros.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-agros">
+<span id="agros-module"></span><h1>agros module<a class="headerlink" href="#module-agros" title="Permalink to this heading"></a></h1>
+<p>Created on Sat Feb 20 17:36:09 2023</p>
+<dl class="simple">
+<dt>Authors:</dt><dd><p>Luca Carocci, Anton Badort, Florian Preiss, Lorenzo Schumann</p>
+</dd>
+<dt>Description:</dt><dd><p>This script defines the Agros class, which represents agricultural
+data and provides various methods for data analysis.</p>
+</dd>
+<dt>Requirements:</dt><dd><p>The script imports the following libraries: os, typing.Union, numpy, pandas,
+seaborn, and matplotlib.pyplot.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="agros.Agros">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">agros.</span></span><span class="sig-name descname"><span class="pre">Agros</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#agros.Agros" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class that represents agricultural data and provides various methods for data analysis.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="agros.Agros.file_url">
+<span class="sig-name descname"><span class="pre">file_url</span></span><a class="headerlink" href="#agros.Agros.file_url" title="Permalink to this definition"></a></dt>
+<dd><p>A string representing the URL or path to the agricultural data file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="agros.Agros.agri_df">
+<span class="sig-name descname"><span class="pre">agri_df</span></span><a class="headerlink" href="#agros.Agros.agri_df" title="Permalink to this definition"></a></dt>
+<dd><p>A dataframe with data from the agricultural data file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="agros.Agros.merge_dict">
+<span class="sig-name descname"><span class="pre">merge_dict</span></span><a class="headerlink" href="#agros.Agros.merge_dict" title="Permalink to this definition"></a></dt>
+<dd><p>A dictionary to adapt the country names in the geo_data dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict()</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">import_file():</span></span></dt>
+<dd><p>Checks if the downloads folder exists and if agricultural_total_factor_productivity.csv
+is in the downloads folder. If not, the downloads folder is created and/or the the
+agricultural_total_factor_productivity.csv is downloaded from the web. If both the
+folder and the file exist, the file is loaded from the downloads folder and returned as
+a pandas dataframe.
+Furthermore, it downloads geographical information and stores it as a geopandas.
+geodataframe.GeoDataFrame.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">country_list():</span></span></dt>
+<dd><p>Creates a list of all unique countries/regions available in the dataset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">corr_quantity():</span></span></dt>
+<dd><p>Calculates the correlation matrix for quantity-related columns of the
+agricultural dataframe and returns a heatmap plot using seaborn.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">area_chart():</span></span></dt>
+<dd><p>Plots an area chart of the distinct “_output_” columns. If a single country or a list
+of countries is specified, the method will plot area charts for each country.
+If no country, an empty list or “World” is specified, the method will plot the sum
+of the distinct outputs for all countries.
+If normalize is True, the output will be normalized in relative terms
+(output will always be 100% for each year).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">total_output():</span></span></dt>
+<dd><p>Plots the total of the distinct “_output_” columns per year for each country that
+is passed. Uses a line chart to make the total output comparable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">gapminder():</span></span></dt>
+<dd><p>Plots a scatter plot to demonstrate the relationship between fertilizer and
+irrigation quantity on output for a specific year.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">choropleth():</span></span></dt>
+<dd><p>Plots a coropleth map that shows the tfp for every country in a specific year.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">predictor():</span></span></dt>
+<dd><p>Predicts the TFP (Total Factor Productivity) for up to three countries using
+ARIMA forecasting.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agros.Agros.area_chart">
+<span class="sig-name descname"><span class="pre">area_chart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="headerlink" href="#agros.Agros.area_chart" title="Permalink to this definition"></a></dt>
+<dd><p>Plots an area chart of the distinct “_output_” columns. If a single country or a list of
+countries is specified, the method will plot area charts for each country.
+If no country, an empty list or “World” is specified, the method will plot the sum of the
+distinct outputs for all countries.
+If normalize is True, the output will be normalized in relative terms
+(output will always be 100% for each year).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>country</strong> (<em>str</em><em>, </em><em>list</em><em> of </em><em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – A string representing the name of the country to be plotted, or a list of strings
+representing the names of the countries to be plotted.
+If None, an empty list or “World”, the chart will show the sum of the distinct outputs
+for all countries.</p></li>
+<li><p><strong>normalize</strong> (<em>bool</em><em>, </em><em>optional</em>) – A boolean value indicating whether or not the output should be normalized.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>axes</strong> – The area chart as a Matplotlib axes object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.Axes</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If any of the specified countries is not a country of the dataset.</p></li>
+<li><p><strong>TypeError</strong> – If normalize parameter is not a boolean value (True or False).</p></li>
+<li><p><strong>TypeError</strong> – If input for the country parameter is not a string or a list of strings.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agros.Agros.choropleth">
+<span class="sig-name descname"><span class="pre">choropleth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2019</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="headerlink" href="#agros.Agros.choropleth" title="Permalink to this definition"></a></dt>
+<dd><p>Plots a choropleth map that shows the tfp for every country in a specific year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>year</strong> (<em>int</em>) – An integer that determines the year that will be selected from the data.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>axes</strong> – The choropleth chart as a Matplotlib axes object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.Axes</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If any of the specified countries does not exist in the dataset.</p></li>
+<li><p><strong>ValueError</strong> – cannot convert float NaN to integer: If a year that is not in the dataset is selected.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agros.Agros.corr_quantity">
+<span class="sig-name descname"><span class="pre">corr_quantity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ClusterGrid</span></span></span><a class="headerlink" href="#agros.Agros.corr_quantity" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the correlation matrix for quantity-related columns of the
+agricultural dataframe and returns a heatmap plot using seaborn.</p>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>corr_heatmap: sns.matrix.ClusterGrid</dt><dd><p>A seaborn heatmap plot of the correlation matrix for quantity-related columns.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agros.Agros.country_list">
+<span class="sig-name descname"><span class="pre">country_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#agros.Agros.country_list" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a list of all unique countries/regions available
+in the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>list_of_countries</strong> – A list of all unique countries/regions present
+in the dataset.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agros.Agros.gapminder">
+<span class="sig-name descname"><span class="pre">gapminder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="headerlink" href="#agros.Agros.gapminder" title="Permalink to this definition"></a></dt>
+<dd><p>Plots a scatter plot to demonstrate the relationship between fertilizer and
+irrigation quantity on output for a specific year.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>year</strong> (<em>int</em>) – An integer that determines the year that will be selected from the data.</p></li>
+<li><p><strong>logscale</strong> (<em>bool</em>) – A boolean that determines if the axes should be a logscale or linear scale</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>axes</strong> – The scatter plot as a Matplotlib axes object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.Axes</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If the parameter passed is not an integer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agros.Agros.import_file">
+<span class="sig-name descname"><span class="pre">import_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="headerlink" href="#agros.Agros.import_file" title="Permalink to this definition"></a></dt>
+<dd><p>Checks if the downloads folder exists and if agricultural_total_factor_productivity.csv
+is in the downloads folder. If not, the downloads folder is created and/or the the
+agricultural_total_factor_productivity.csv is downloaded from the web. If both the
+folder and the file exist, the file is loaded from the downloads folder and returned as
+a pandas dataframe.
+Furthermore, it downloads geographical information and stores it as a geopandas.
+geodataframe.GeoDataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>agri_df: pandas dataframe</dt><dd><p>A table with information from
+agricultural_total_factor_productivity.csv</p>
+</dd>
+</dl>
+<p>geo_data: A geopandas.geodataframe.GeoDataFrame file.</p>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple containing</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agros.Agros.predictor">
+<span class="sig-name descname"><span class="pre">predictor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">countries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="headerlink" href="#agros.Agros.predictor" title="Permalink to this definition"></a></dt>
+<dd><p>Predicts the TFP (Total Factor Productivity) for up to three countries using
+ARIMA forecasting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>countries</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A list of up to three country names to be included in the TFP prediction.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>axes</strong> – A matplotlib axes object containing the plot of TFP for the selected countries
+and their ARIMA forecast.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plt.Axes</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError:</strong> – If the number of valid country names selected is not between 1 and 3.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agros.Agros.total_output">
+<span class="sig-name descname"><span class="pre">total_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">countries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Axes</span></span></span><a class="headerlink" href="#agros.Agros.total_output" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the total of the distinct “_output_” columns per year for each country that
+is passed. Uses a line chart to make the total output comparable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>countries</strong> (<em>str</em><em>, </em><em>list</em><em>[</em><em>str</em><em>]</em>) – A string representing the name of the country to be plotted or alternatively a
+list containing multiple strings of countries.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>axes</strong> – The line chart as a Matplotlib axes object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.Axes</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If the specified country does not exist in the dataset.</p></li>
+<li><p><strong>TypeError</strong> – If the Parameters are not a str or a list of str.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, A. Badort, L. Carroci, F. Preiss, L. Schumann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
