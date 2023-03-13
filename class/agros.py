@@ -118,7 +118,7 @@ class Agros:
             geo_data: A geopandas.geodataframe.GeoDataFrame file.
         """
         # Check if downloads folder exists
-        downloads_dir = ('../downloads')
+        downloads_dir = '../downloads'
         check_downloads_dir = os.path.isdir(downloads_dir)
 
         # If folder doesn't exist, create it.
@@ -211,7 +211,7 @@ class Agros:
                       xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
-                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                      bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(corr_heatmap)
 
@@ -292,7 +292,7 @@ class Agros:
                           xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                           ha='center', va='center', annotation_clip=False,
                           xytext=(0, 20), textcoords='offset points',
-                          bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                          bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         else:
             # Checks if input is a string and converts it to a list
@@ -347,7 +347,7 @@ class Agros:
                               xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                               ha='center', va='center', annotation_clip=False,
                               xytext=(0, 20), textcoords='offset points',
-                              bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                              bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(axes)
 
@@ -417,7 +417,7 @@ class Agros:
                       xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
-                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                      bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(axes)
 
@@ -485,7 +485,8 @@ class Agros:
         ]
 
         axes.legend(handles=legend_elements, loc='upper left',
-                   title='The diameter of each\ndot shows the irrigation\nquantity (1000 ha) in\na country.\n',
+                   title="The diameter of each\ndot shows the irrigation\n"
+                    "quantity (1000 ha) in\na country.\n",
                    bbox_to_anchor=(1.02, 1), borderaxespad=0)
 
         axes.set_title("Effect of Fertilizer and Irrigation Quantity on Output in " + str(year),
@@ -501,7 +502,7 @@ class Agros:
                       xy=(0.5, -0.32), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
-                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                      bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(axes)
 
@@ -558,7 +559,7 @@ class Agros:
                       xy=(0.275, -0.32), xycoords="axes fraction", fontsize=9,
                       ha='left', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
-                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                      bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(axes)
 
@@ -652,6 +653,6 @@ class Agros:
                       xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
-                      bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
+                      bbox={'boxstyle':'round,pad=0.5', 'fc':'white', 'alpha':0.9})
 
         return plt.show(fig, axes)
