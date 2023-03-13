@@ -66,19 +66,40 @@ The following points will guide you through the virtual environment's installati
 
 **Set up**
 - Download the repository's source code or clone it to your system.
-- Open a shell, navigate into the repository's directory and type **conda create env -f AgrosEnv.yml** as a command into your terminal.
+- Open a shell, navigate into the repository's directory and run the follwing command:
+    ```console
+    name@device:~$ conda create env -f AgrosEnv.yml
+    ```
 - Conda will now install the virtual environment with all the required packages.
 
 **Employment**
-- In your terminal, run **conda info --env**  to get an overview of your system's virtual environments.
+- To get an overview of the virtual environments in your system and check if the **Agros_Environment** has been installed properly run the following line in your terminal:
+    ```console
+    name@device:~$ conda info --env
+    ```
 - If the installation was successful, you should be able to see the new environment as Agros_Environment.
-- Activate the environment by passing **conda activate Agros_Environment** to your terminal.
-- The environment comes with a version of Jupyter lab installed. Once the environment has been booted you can type **Jupyter lab** into your terminal to start the IDE in your browser.
+- Activate the environment with the following command
+    ```console
+    name@device:~$ conda activate Agros_Environment
+    ```
+- The environment comes with a version of Jupyter lab installed. Once the environment has been booted you can type
+    ```console
+    name@device:~$ Jupyter lab
+    ``` 
+    into your terminal to start the IDE in your browser.
+
 - Once JupyterLab has started, you can use the environment to run the showcase notebook. The notebook should have all required libraries available and run without problems.
 
 **Deactivation and Deletion**
-- In case you wish to exit the virtual environment, you can either close the current terminal windows and open a new one, quit the terminal, or call **conda deactivate**
-- If you want to delete the environment from your machine execute the following command in your terminal: **conda remove -n Agros_Environment --all**
+- In case you wish to exit the virtual environment, you can either close the current terminal windows and open a new one, quit the terminal, or call
+    
+    ```console
+    name@device:~$ conda deactivate**
+    ```
+- If you want to delete the environment from your machine execute the following command:
+    ```console
+    name@device:~$ conda remove -n Agros_Environment --all
+    ```
 
 
 ## Methods
