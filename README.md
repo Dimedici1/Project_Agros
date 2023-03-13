@@ -145,6 +145,12 @@ Plots a choropleth map that shows the tfp for every country in a specific year.
 
 Predicts the TFP (Total Factor Productivity) for up to three countries using ARIMA forecasting.
 
+## Documentation
+
+To view the documentation for our modules, open the following file in a web browser:
+    
+    ./docs/_build/html/index.html
+
 ## Usage
 Agros provides a Agros class with several methods for analyzing and visualizing data on agricultural total factor productivity. Here's an example of how to use it:
 
