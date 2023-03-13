@@ -38,11 +38,17 @@ The dataset used in this project is provided by the U.S. Department of Agricultu
 
 
 ## Installation
-To use Agros, you need to have Python 3.x installed on your system. You can then download the source code [here](https://gitlab.com/florianpreiss/group_02/-/archive/main/group_02-main.zip) or you can clone this repository.
+You can then download the source code [here](https://gitlab.com/florianpreiss/group_02/-/archive/main/group_02-main.zip) or you can clone this repository.
 
 ```
 git clone https://gitlab.com/florianpreiss/group_02.git
 ```
+
+To use Agros, we propose two options:
+
+1. Run it in your own environment, for which you need to have Python 3.x installed on your system together with all libraries listed under the **Requirements**.
+
+2. Use the provided **AgrosEnv.yml** file to create a virtual environment, already containing all required libraries. To employ the virtual environment you need to have conda installed. A step by step guide on how to employ the virtual environment can be found under the Virtual Environment section.
 
 ## Requirements
 The following libraries are required to run the Agros class:
@@ -53,6 +59,27 @@ The following libraries are required to run the Agros class:
 - pandas
 - seaborn
 - matplotlib.pyplot
+- pmdarima
+
+## Virtual Environment
+The following points will guide you through the virtual environment's installation, employment, and deletion. We assume that you already have conda installed on your system.
+
+**Set up**
+- Download the repository's source code or clone it to your system.
+- Open a shell, navigate into the repository's directory and type **conda create env -f AgrosEnv.yml** as a command into your terminal.
+- Conda will now install the virtual environment with all the required packages.
+
+**Employment**
+- In your terminal, run **conda info --env**  to get an overview of your system's virtual environments.
+- If the installation was successful, you should be able to see the new environment as Agros_Environment.
+- Activate the environment by passing **conda activate Agros_Environment** to your terminal.
+- The environment comes with a version of Jupyter lab installed. Once the environment has been booted you can type **Jupyter lab** into your terminal to start the IDE in your browser.
+- Once JupyterLab has started, you can use the environment to run the showcase notebook. The notebook should have all required libraries available and run without problems.
+
+**Deactivation and Deletion**
+- In case you wish to exit the virtual environment, you can either close the current terminal windows and open a new one, quit the terminal, or call **conda deactivate**
+- If you want to delete the environment from your machine execute the following command in your terminal: **conda remove -n Agros_Environment --all**
+
 
 ## Methods
 The Agros class provides the following methods:
