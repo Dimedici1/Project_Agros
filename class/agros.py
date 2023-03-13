@@ -207,7 +207,7 @@ class Agros:
 
         # Add an annotation
         axes.annotate("Source: International Agricultural Productivity,"
-                      "USDA Economic Research Service, 2022",
+                      " USDA Economic Research Service, 2022",
                       xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
@@ -343,7 +343,7 @@ class Agros:
 
                 # Add an annotation
                 axes.annotate("Source: International Agricultural Productivity,"
-                              "USDA Economic Research Service, 2022",
+                              " USDA Economic Research Service, 2022",
                               xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                               ha='center', va='center', annotation_clip=False,
                               xytext=(0, 20), textcoords='offset points',
@@ -413,7 +413,7 @@ class Agros:
 
         # Add an annotation
         axes.annotate("Source: International Agricultural Productivity,"
-                      "USDA Economic Research Service, 2022",
+                      " USDA Economic Research Service, 2022",
                       xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
@@ -485,19 +485,19 @@ class Agros:
         ]
 
         axes.legend(handles=legend_elements, loc='upper left',
-                   title='The diameter of each\ndot shows the irrigation\nquantity in a country.\n',
+                   title='The diameter of each\ndot shows the irrigation\nquantity (1000 ha) in\na country.\n',
                    bbox_to_anchor=(1.02, 1), borderaxespad=0)
 
         axes.set_title("Effect of Fertilizer and Irrigation Quantity on Output in " + str(year),
                        fontdict={'size': 16, 'weight': 'bold'}, pad=20)
-        axes.set_xlabel("Fertilizer Quantity", fontsize=12, labelpad=10)
-        axes.set_ylabel("Output Quantity", fontsize=12, labelpad=10)
+        axes.set_xlabel("Fertilizer Quantity (t)", fontsize=12, labelpad=10)
+        axes.set_ylabel("Output Quantity ($1000)", fontsize=12, labelpad=10)
         axes.tick_params(axis='both', labelsize=10)
         axes.grid(axis='both', alpha=0.3)
 
         # Add an annotation
         axes.annotate("Source: International Agricultural Productivity,"
-                      "USDA Economic Research Service, 2022",
+                      " USDA Economic Research Service, 2022",
                       xy=(0.5, -0.32), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
@@ -508,17 +508,17 @@ class Agros:
 
     def choropleth(self, year: int = 2019) -> plt.Axes:
         """
-        Plots a coropleth map that shows the tfp for every country in a specific year.
+        Plots a choropleth map that shows the tfp for every country in a specific year.
 
         Parameters
         ----------
         year: int
-        An integer that determines the year that will be selected from the data.
+            An integer that determines the year that will be selected from the data.
 
         Returns
         -------
         axes: matplotlib.Axes
-            The coropleth chart as a Matplotlib axes object.
+            The choropleth chart as a Matplotlib axes object.
 
         Raises
         ------
@@ -531,22 +531,32 @@ class Agros:
         # Checks if input is a list (Or a string that was converted to a list)
         if not isinstance(year, int):
             raise TypeError(f"{year} needs to be an integer")
+
         # Get data and geo data and merge it
         data, geo_data = self.import_file()
         geo_data['name'] = geo_data['name'].replace(self.merge_dict).fillna(geo_data['name'])
         merged_data = pd.merge(geo_data, data, left_on="name", right_on="Entity", how="left")
         merged_data = merged_data[merged_data['Year'] == year]
+
         #Plot the Choropleth map
         axes = merged_data.plot(column = 'tfp', #Assign numerical data column
                       legend = True, #Decide to show legend or not
                       figsize = [20,10],\
-                      legend_kwds = {'label': "tfp per country"}) #Name the legend
+                      legend_kwds = {'label': "TFP per Country"}) #Name the legend
+
+        # Add a title and axis labels
+        axes.set_title(f"Total Factor Productivity (TFP) per Country in {year}",
+                       fontdict={'size':16, 'weight':'bold'}, pad=20)
+        axes.set_xlabel("Longitude", fontsize=12, labelpad=10)
+        axes.set_ylabel("Latitude", fontsize=12, labelpad=10)
 
         # Add an annotation
-        axes.annotate("Source: Made with Natural Earth. Free vector and raster map"
-                      "data @ naturalearthdata.com, 2022",
-                      xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
-                      ha='center', va='center', annotation_clip=False,
+        axes.annotate("Sources:\n1) International Agricultural Productivity,"
+                      " USDA Economic Research Service, 2022\n"
+                      "2) Made with Natural Earth. Free vector and raster map"
+                      " data @ naturalearthdata.com, 2022",
+                      xy=(0.275, -0.32), xycoords="axes fraction", fontsize=9,
+                      ha='left', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
                       bbox=dict(boxstyle='round,pad=0.5', fc='white', alpha=0.9))
 
@@ -638,7 +648,7 @@ class Agros:
 
         # Add an annotation
         axes.annotate("Source: International Agricultural Productivity,"
-                      "USDA Economic Research Service, 2022",
+                      " USDA Economic Research Service, 2022",
                       xy=(0.5, -0.31), xycoords="axes fraction", fontsize=9,
                       ha='center', va='center', annotation_clip=False,
                       xytext=(0, 20), textcoords='offset points',
