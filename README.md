@@ -61,7 +61,8 @@ The following libraries are required to run the Agros class:
 - pandas
 - seaborn
 - matplotlib.pyplot
-- pmdarima
+- pmdarima.auto_arima
+- geopandas
 
 ## Virtual Environment
 The following points will guide you through the virtual environment's installation, employment, and deletion. We assume that you **already have conda installed** on your system.
@@ -103,7 +104,7 @@ The following points will guide you through the virtual environment's installati
     name@device:~$ conda remove -n Agros_Environment --all
     ```
 
->>>>>>> README.md
+
 
 ## Methods
 The Agros class provides the following methods:
