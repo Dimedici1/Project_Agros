@@ -71,7 +71,7 @@ The following points will guide you through the virtual environment's installati
 - Download the repository's source code or clone it to your system.
 - Open a shell, navigate into the repository's directory, and run the follwing command:
     ```console
-    name@device:~$ conda create env -f AgrosEnv.yml
+    name@device:~$ conda env create -f AgrosEnv.yml
     ```
 - Conda will now install the virtual environment with all the required packages.
 
