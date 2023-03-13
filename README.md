@@ -94,7 +94,7 @@ The following points will guide you through the virtual environment's installati
 - In case you wish to exit the virtual environment, you can either close the current terminal windows and open a new one, quit the terminal, or call
     
     ```console
-    name@device:~$ conda deactivate**
+    name@device:~$ conda deactivate
     ```
 - If you want to delete the environment from your machine execute the following command:
     ```console
