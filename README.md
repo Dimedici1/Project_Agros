@@ -48,7 +48,7 @@ To use Agros, we propose two options:
 
 1. Run it in your own environment, for which you need to have Python 3.x installed on your system together with all libraries listed under the **Requirements**.
 
-2. Use the provided **AgrosEnv.yml** file to create a virtual environment, already containing all required libraries. To employ the virtual environment you need to have conda installed. A step by step guide on how to employ the virtual environment can be found under the Virtual Environment section.
+2. Use the provided **AgrosEnv.yml** file to create a virtual environment, already containing all required libraries. To employ the virtual environment you **need to have conda installed**. A step by step guide on how to employ the virtual environment can be found under the Virtual Environment section.
 
 ## Requirements
 The following libraries are required to run the Agros class:
@@ -62,11 +62,11 @@ The following libraries are required to run the Agros class:
 - pmdarima
 
 ## Virtual Environment
-The following points will guide you through the virtual environment's installation, employment, and deletion. We assume that you already have conda installed on your system.
+The following points will guide you through the virtual environment's installation, employment, and deletion. We assume that you **already have conda installed** on your system.
 
 **Set up**
 - Download the repository's source code or clone it to your system.
-- Open a shell, navigate into the repository's directory and run the follwing command:
+- Open a shell, navigate into the repository's directory, and run the follwing command:
     ```console
     name@device:~$ conda create env -f AgrosEnv.yml
     ```
