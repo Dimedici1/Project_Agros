@@ -72,7 +72,6 @@ docs/_templates/
 docs/*.rst
 docs/conf.py
 
-
 # PyBuilder
 target/
 
