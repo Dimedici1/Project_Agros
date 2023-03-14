@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('../class/'))
 project = 'Project Agros'
 copyright = '2023, A. Badort, L. Carroci, F. Preiss, L. Schumann'
 author = 'A. Badort, L. Carroci, F. Preiss, L. Schumann'
-release = '0.1'
+release = '0.2'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
