@@ -38,22 +38,26 @@ class Agros:
     file_url : str
         A string representing the URL or path to the agricultural data file.
 
-    agri_df : str
-        A dataframe with data from the agricultural data file.
+    agri_df : pandas.core.frame.DataFrame
+        A DataFrame with data from the agricultural data file.
+    
+    geo_data: geopandas.geodataframe.GeoDataFrame 
+        A geopandas DataFrame with geographical data.
 
     merge_dict : dict()
         A dictionary to adapt the country names in the geo_data dataset.
 
     Methods
     -------
-    import_file():
+    import_files():
         Checks if the downloads folder exists and if agricultural_total_factor_productivity.csv
         is in the downloads folder. If not, the downloads folder is created and/or the the
         agricultural_total_factor_productivity.csv is downloaded from the web. If both the
-        folder and the file exist, the file is loaded from the downloads folder and returned as
-        a pandas dataframe.
-        Furthermore, it downloads geographical information and stores it as a geopandas.
-        geodataframe.GeoDataFrame.
+        folder and the file exist, the file is loaded from the downloads folder and saved as
+        a pandas dataframe. Furthermore, it downloads geographical information and 
+        stores it as a geopandas.geodataframe.GeoDataFrame.
+        The method does not return any values but saves them as attributes of the class.
+
 
     country_list():
         Creates a list of all unique countries/regions available in the dataset.
@@ -89,34 +93,45 @@ class Agros:
     def __init__(self, file_url: str):
         self.file_url = file_url
         self.agri_df = None
+        self.geo_data = None
         self.merge_dict = {
             "United States of America": "United States",
             "W. Sahara": "Sub-Saharan Africa",
             "Dem. Rep. Congo": "Democratic Republic of Congo",
             "Dominican Rep.": "Dominican Republic",
             "Timor-Leste": "Timor",
-            "Central African Rep.": "Central African Republic"
+            "Central African Rep.": "Central African Republic",
+            "S. Sudan": "South Sudan",
+            "Bosnia and Herz.": "Bosnia and Herzegovina",
+            "Eq. Guinea": "Equatorial Guinea",
+            "Myanmar": "Burma",
+            "eSwatini": "Eswatini",
+            "Macedonia": "North Macedonia",
+            "Solomon Is.": "Solomon Islands",
+            "North Macedonia": "Macedonia"
         }
 
-    def import_file(self) -> tuple:
+    def import_files(self):
         """
         Checks if the downloads folder exists and if agricultural_total_factor_productivity.csv
         is in the downloads folder. If not, the downloads folder is created and/or the the
         agricultural_total_factor_productivity.csv is downloaded from the web. If both the
-        folder and the file exist, the file is loaded from the downloads folder and returned as
-        a pandas dataframe.
-        Furthermore, it downloads geographical information and stores it as a geopandas.
-        geodataframe.GeoDataFrame.
+        folder and the file exist, the file is loaded from the downloads folder and saved as
+        a pandas dataframe. Furthermore, it downloads geographical information and 
+        stores it as a geopandas.geodataframe.GeoDataFrame.
+        The method does not return any values but saves them as attributes of the class.
+
+        Parameters
+        ----------
+
+        self: class
+            The Agros class itself.
 
         Returns
-        ---------------
-        tuple containing:
+        -------
 
-            agri_df: pandas dataframe
-                A table with information from
-                agricultural_total_factor_productivity.csv
-
-            geo_data: A geopandas.geodataframe.GeoDataFrame file.
+        Nothing. Assigns the DataFrame and GeoDataFrame to the 
+        class attributes agri_df and geo_data.
         """
         # Check if downloads folder exists
         downloads_dir = '../downloads'
@@ -137,9 +152,8 @@ class Agros:
         self.agri_df = pd.read_csv(file_path, index_col=0)
 
         # Download geo data
-        geo_data = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+        self.geo_data = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
 
-        return self.agri_df, geo_data
 
     def country_list(self) -> list:
         """
@@ -535,7 +549,8 @@ class Agros:
             raise TypeError(f"{year} needs to be an integer")
 
         # Get data and geo data and merge it
-        data, geo_data = self.import_file()
+        data = self.agri_df
+        geo_data = self.geo_data
         geo_data['name'] = geo_data['name'].replace(self.merge_dict).fillna(geo_data['name'])
         merged_data = pd.merge(geo_data, data, left_on="name", right_on="Entity", how="left")
         merged_data = merged_data[merged_data['Year'] == year]
